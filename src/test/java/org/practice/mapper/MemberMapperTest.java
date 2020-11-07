@@ -21,12 +21,12 @@ public class MemberMapperTest {
 	@Test
 	public void createTest() {
 		
-		String userid = "test1";
-		String username = "test1";
-		String pw = "12345";
-		String email = "test1@naver.com";
+		MemberVO vo = new MemberVO();
 		
-		MemberVO vo = new MemberVO(userid, username, pw, email);
+		vo.setUserid("test2");
+		vo.setPw("test2");
+		vo.setUsername("test2");
+		vo.setEmail("test2@naver.com");
 		
 		mapper.createAccount(vo);
 	}
