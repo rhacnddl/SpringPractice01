@@ -10,10 +10,13 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class MemberController {
 
-	@GetMapping("/login")
-	public void login() {
+	@GetMapping("/customLogin")
+	public void customLogin() {
 		log.info("Welcome!");
 	}
 	
-	
+	@GetMapping("/createAccount")
+	public void account() {
+		log.info("Create Account");
+	}
 }

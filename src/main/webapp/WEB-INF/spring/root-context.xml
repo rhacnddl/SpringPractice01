@@ -38,5 +38,7 @@
 		<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 		
 		<mybatis-spring:scan base-package="org.practice.mapper"/>
-	
+		<context:component-scan base-package="org.practice.service"/>
+		<context:component-scan base-package="org.practice.security"/>
+			
 </beans>
