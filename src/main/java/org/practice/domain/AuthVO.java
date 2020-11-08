@@ -8,5 +8,5 @@ import lombok.Data;
 public class AuthVO {
 	
 	private String userid;
-	private String authentication;
+	private String authority;
 }

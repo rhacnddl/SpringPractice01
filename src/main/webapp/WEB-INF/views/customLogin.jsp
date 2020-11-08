@@ -14,11 +14,11 @@
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		<div class="standard-rectangle">
 			<label>ID</label>
-			<input type="text" name="userid" placeholder="ID">
+			<input type="text" name="username" placeholder="ID">
 		</div>
 		<div class="standard-rectangle">
 			<label>Password</label>
-			<input type="password" name="pw" placeholder="Password">
+			<input type="password" name="password" placeholder="Password">
 		</div>
 		<div>
 			<input type="submit" class="submit" value="Login">
@@ -26,11 +26,15 @@
 		</div>
 	</form>
 </div>
+<div>
+${error}
+</div>
+<div>
+${logout}
+</div>
 
 <script type="text/javascript">
-	$(document).ready(function(){
 	
-	});
 </script>
 </body>
 </html>

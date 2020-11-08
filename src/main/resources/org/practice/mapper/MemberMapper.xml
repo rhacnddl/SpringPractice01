@@ -9,5 +9,29 @@
 	VALUES(#{userid}, #{pw}, #{username}, #{email})
 </insert>
 
+<insert id="defaultAuth">
+	INSERT INTO AUTH(AUTHORITY, USERID) 
+	VALUES('MEMBER', #{userid})
+</insert>
+
+<resultMap type="org.practice.domain.MemberVO" id="memberMap">
+	<id property="userid" column="USERID"/>
+	<result property="userid" column="USERID"/>
+	<result property="pw" column="PW"/>
+	<result property="username" column="USERNAME"/>
+	<result property="regDate" column="REGDATE"/>
+	<result property="email" column="EMAIL"/>
+	<collection property="authList" resultMap="authMap">
+	</collection>
+</resultMap>
+<resultMap type="org.practice.domain.AuthVO" id="authMap">
+	<result property="userid" column="USERID"/>
+	<result property="authority" column="AUTHORITY"/>
+</resultMap>
+<select id="read" resultMap="memberMap">
+	SELECT M.USERID, PW, USERNAME, REGDATE, EMAIL, AUTHORITY
+	FROM MEMBER M LEFT OUTER JOIN AUTH ON M.USERID = AUTH.USERID
+	WHERE M.USERID = #{userid}
+</select>
 
 </mapper>

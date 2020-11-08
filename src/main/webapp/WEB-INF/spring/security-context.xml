@@ -5,17 +5,25 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<!-- <bean id="customUserDetailService" class="org.practice.security.CustomUserDetailService"/> -->
+	<bean id="customLoginSuccess" class="org.practice.security.CustomLoginSuccessHandler"/>
+	<bean id="customUserDetailService" class="org.practice.security.CustomUserDetailService"></bean>
+	<bean id="customAccessDenied" class="org.practice.security.CustomAccessDeniedHandler"/>
+	<bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<security:http>
-		<security:form-login />
+	
+		<!-- <security:intercept-url pattern="/home" access="isAuthenticated()"/> -->
+	
+		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
+		<security:access-denied-handler ref="customAccessDenied"/>
 	</security:http>
 	
 	<security:authentication-manager>
-		<!-- 
+		
 		<security:authentication-provider user-service-ref="customUserDetailService">
-		</security:authentication-provider>
-		 -->
+		
+			<security:password-encoder ref="bCryptPasswordEncoder"/>
+		</security:authentication-provider> 
 	</security:authentication-manager>
 </beans>

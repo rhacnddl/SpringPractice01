@@ -12,7 +12,7 @@
 	
 	<!-- Application Loggers -->
 	<logger name="org.practice.controller">
-		<level value="info" />
+		<level value="warn" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
