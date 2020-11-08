@@ -15,8 +15,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Setter(onMethod_ = @Autowired)
 	private MemberMapper mapper;
-	
-	@Setter(onMethod_ = @Autowired)
+
 	private PasswordEncoder encoder;
 	
 	@Override

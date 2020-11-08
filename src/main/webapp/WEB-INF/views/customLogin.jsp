@@ -21,6 +21,10 @@
 			<input type="password" name="password" placeholder="Password">
 		</div>
 		<div>
+			<div>
+				<label>자동로그인</label>
+				<input type="checkbox" name="remember-me">
+			</div>
 			<input type="submit" class="submit" value="Login">
 			<a href="createAccount">Create Account</a>
 		</div>

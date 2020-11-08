@@ -35,9 +35,9 @@ public class MemberController {
 		log.info("< Login >");
 		
 		if(error != null)
-			model.addAttribute("error", error);
+			model.addAttribute("error", "Login Error Check your Account");
 		if(logout != null)
-			model.addAttribute("logout", logout);
+			model.addAttribute("logout", "Logout!");
 		
 		
 	}
@@ -47,6 +47,15 @@ public class MemberController {
 		log.info("Login : " + member);
 		
 		return "redirect:/home";
+	}
+	
+	@PostMapping("/customLogout")
+	public String logout(String logout, RedirectAttributes rttr) {
+		
+		log.warn("===================================");
+		log.warn("# Logout Success..." + logout);
+		
+		return "redirect:/customLogin";
 	}
 	
 	@GetMapping("/createAccount")

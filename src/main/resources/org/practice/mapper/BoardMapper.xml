@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org//dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.practice.mapper.BoardMapper">
+
+<select id="getList" resultType="org.practice.domain.BoardVO">
+	<![CDATA[
+		SELECT * FROM BOARD WHERE BNO > 0 AND DIV = #{div} 
+	]]>
+</select>
+
+<insert id="write">
+	INSERT INTO BOARD(TITLE, CONTENT, WRITER, DIV)
+	VALUES(#{title}, #{content}, #{writer}, #{div})
+</insert>
+
+</mapper>
