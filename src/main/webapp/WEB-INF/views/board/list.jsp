@@ -10,8 +10,16 @@
 <title>Board List</title>
 </head>
 <body>
-	<div align="left"><h2>자유게시판</h3></div>
+<c:if test="${division == 100}">
+	<div align="left">
+		<h2>자유게시판</h3></div>
 	<div>
+</c:if>
+<c:if test="${division == 101}">
+	<div align="left">
+		<h2>출석게시판</h3></div>
+	<div>
+</c:if>
 		<div align="center">
 			<form action="viewList">
 				<select>
@@ -23,7 +31,7 @@
 		</div>
 		
 		<div class="button-default" align="center">
-			<a href="/board/write">게시글 작성</a>
+			<a href="/board/write?div=${division}">게시글 작성</a>
 		</div>
 		<table border="1" bordercolor="black" width="700" height = "130" align="center">
 			<tr bgcolor="yellow" align="center">

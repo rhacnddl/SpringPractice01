@@ -13,4 +13,7 @@ public interface BoardMapper {
 	public BoardVO get(int bno);
 	public void hit(int bno);
 	public String exist(int bno);
+	
+	//댓글 작성 후 조회수 증가하는 현상을 제거하기 위해 hit = hit - 1
+	public void hit_minus(int bno);
 }

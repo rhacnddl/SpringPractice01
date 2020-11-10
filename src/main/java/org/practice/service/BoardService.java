@@ -12,4 +12,6 @@ public interface BoardService {
 	public boolean remove(int bno);
 	public void write(BoardVO board);
 	public void hit(int bno);
+	
+	public void hit_minus(int bno);
 }

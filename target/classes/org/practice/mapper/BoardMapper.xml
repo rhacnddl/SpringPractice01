@@ -6,7 +6,7 @@
 
 <select id="getList" resultType="org.practice.domain.BoardVO">
 	<![CDATA[
-		SELECT * FROM BOARD WHERE BNO > 0 AND DIV = #{div} 
+		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ * FROM BOARD WHERE BNO > 0 AND DIV = #{div} 
 	]]>
 </select>
 
@@ -36,5 +36,9 @@
 <select id="exist" resultType="string">
 	SELECT WRITER FROM BOARD WHERE BNO = #{bno}
 </select>
+
+<update id="hit_minus">
+	UPDATE BOARD SET HIT = HIT - 1 WHERE BNO = #{bno}
+</update>
 
 </mapper>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.practice.domain.BoardVO;
 import org.practice.service.BoardService;
+import org.practice.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -26,22 +27,26 @@ public class BoardController {
 	@Setter(onMethod_ = @Autowired)
 	private BoardService service;
 	
+	@Setter(onMethod_ = @Autowired)
+	private ReplyService reply_service;
+	
 	
 	@GetMapping("/list")
 	public void list(int div, Model model) {
 		
 		log.info("=============== Board Controller ====================");
 		model.addAttribute("list", service.getList(div));
+		model.addAttribute("division", div);
 	}
 	
 	@GetMapping("/write")
-	public void write() {
+	public void write(int div, Model model) {
 		
 		log.info("# Board Write Page");
+		model.addAttribute("division", div);
 	}
 	@PostMapping("/write")
 	public String write(BoardVO board, RedirectAttributes rttr) {
-		
 		
 		log.info("@Controller - BoardVO : " + board);
 		service.write(board);
@@ -58,6 +63,7 @@ public class BoardController {
 		
 		service.hit(bno);
 		model.addAttribute("board", service.get(bno));
+		model.addAttribute("reply", reply_service.list(bno));
 	}
 	
 	@GetMapping({"/update"})
@@ -67,7 +73,6 @@ public class BoardController {
 		
 		model.addAttribute("board", service.get(bno));
 	}
-	
 	@PostMapping("/update")
 	public String update(BoardVO board, RedirectAttributes rttr) {
 		
@@ -80,7 +85,7 @@ public class BoardController {
 			log.info("Can't Update Board : " + board);
 		}
 		
-		return "redirect:/board/list";
+		return "redirect:/board/list?div=" + board.getDiv();
 	}
 	
 	@GetMapping("/remove")

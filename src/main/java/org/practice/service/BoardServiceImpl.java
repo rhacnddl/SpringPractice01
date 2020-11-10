@@ -79,5 +79,11 @@ public class BoardServiceImpl implements BoardService{
 		mapper.hit(bno);
 	}
 
+	@Override
+	public void hit_minus(int bno) {
+		
+		log.info("Board " + bno + " Hit - 1");
+		mapper.hit_minus(bno);
+	}
 	
 }

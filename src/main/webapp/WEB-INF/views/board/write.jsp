@@ -19,8 +19,8 @@
 		<div class="form-default">
 			<label>Category</label>
 			<select name="div">
-				<option value="100" selected="selected">자유게시판</option>
-				<option value="101">인사게시판</option>
+				<option value="100" <c:if test="${division == 100}">selected="selected"</c:if>>자유게시판</option>
+				<option value="101" <c:if test="${division == 101}">selected="selected"</c:if>>출석게시판</option>
 			</select>
 		</div>
 		<div class="form-default">
@@ -39,6 +39,9 @@
 		</div>
 		<button>Submit</button>
 	</form>
+</div>
+<div align="center">
+	<a href="/board/list?div=${division}">목록</a>
 </div>
 
 </body>
