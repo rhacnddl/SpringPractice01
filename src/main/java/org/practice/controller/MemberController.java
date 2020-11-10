@@ -24,7 +24,7 @@ public class MemberController {
 	
 	
 	@GetMapping("/home")
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize(value = "isAuthenticated()")
 	public void home() {
 		
 		log.info("Welcome to HOME");

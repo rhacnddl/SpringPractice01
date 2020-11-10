@@ -22,8 +22,8 @@
 </div>
 <div class="home-list">
 	<ul>
-		<li><a href="/board/list/100">자유게시판</a></li>
-		<li><a href="/board/list/101">출석게시판</a></li>
+		<li><a href="/board/list?div=100">자유게시판</a></li>
+		<li><a href="/board/list?div=101">출석게시판</a></li>
 	</ul>
 </div>
 

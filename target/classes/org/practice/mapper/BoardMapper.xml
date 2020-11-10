@@ -11,8 +11,30 @@
 </select>
 
 <insert id="write">
-	INSERT INTO BOARD(TITLE, CONTENT, WRITER, DIV)
-	VALUES(#{title}, #{content}, #{writer}, #{div})
+	INSERT INTO BOARD(BNO, TITLE, CONTENT, WRITER, DIV)
+	VALUES(BNO_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, #{div})
 </insert>
+
+<delete id="remove">
+	DELETE BOARD WHERE BNO = #{bno}
+</delete>
+
+<update id="update">
+	UPDATE BOARD SET
+	TITLE = #{title}, CONTENT = #{content}, UPDATEDATE = SYSDATE
+	WHERE BNO = #{bno} 
+</update>
+
+<update id="hit">
+	UPDATE BOARD SET HIT = HIT + 1 WHERE BNO = #{bno}
+</update>
+
+<select id="get" resultType="org.practice.domain.BoardVO">
+	SELECT * FROM BOARD WHERE BNO = #{bno}
+</select>
+
+<select id="exist" resultType="string">
+	SELECT WRITER FROM BOARD WHERE BNO = #{bno}
+</select>
 
 </mapper>

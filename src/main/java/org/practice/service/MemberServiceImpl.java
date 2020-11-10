@@ -16,13 +16,15 @@ public class MemberServiceImpl implements MemberService {
 	@Setter(onMethod_ = @Autowired)
 	private MemberMapper mapper;
 
+	@Setter(onMethod_ = @Autowired)
 	private PasswordEncoder encoder;
 	
 	@Override
 	public void createAccount(MemberVO member) {
 		
-		member.setPw(encoder.encode(member.getPw()));
-		log.info("MemberVO : " + member);
+		String enc_pw = encoder.encode(member.getPw());
+		member.setPw(enc_pw);
+		log.info("@Service MemberVO : " + member);
 		
 		mapper.createAccount(member);
 	}
@@ -31,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
 	public void defaultAuth(String userid) {
 		
 		log.info("Add Default Auth 'Member'");
-		log.info("Userid : " + userid);
+		log.info("@Service Userid : " + userid);
 		
 		mapper.defaultAuth(userid);
 	}

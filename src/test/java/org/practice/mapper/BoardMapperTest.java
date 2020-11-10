@@ -21,7 +21,7 @@ public class BoardMapperTest {
 	@Setter(onMethod_ = @Autowired)
 	private BoardMapper mapper;
 	
-	
+	/*
 	@Test
 	public void writeTest() {
 		
@@ -43,5 +43,34 @@ public class BoardMapperTest {
 		List<BoardVO> list = mapper.getList(100);
 		
 		log.info(list);
+	}
+	
+	@Test
+	public void removeTest() {
+		int bno = 2;
+		BoardVO board = mapper.get(bno);
+		if(board != null) {
+			log.info("Remove BNO : " + bno);
+			mapper.remove(bno);
+		}
+		else
+			log.info("BNO " + bno + " is not exist");
+	}
+	*/
+	
+	@Test
+	public void updateTest() {
+		String title = "test4";
+		String content = "test4";
+		int bno = 1;
+		
+		BoardVO board = mapper.get(bno);
+		if(board != null) {
+			board.setTitle(title);
+			board.setContent(content);
+			
+			log.info(board);
+			mapper.update(board);
+		}
 	}
 }

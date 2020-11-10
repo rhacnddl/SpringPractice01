@@ -9,6 +9,7 @@ public class BoardVO {
 	
 	private int bno;
 	private int div;
+	private int hit;
 	private String title;
 	private String content;
 	private String writer;

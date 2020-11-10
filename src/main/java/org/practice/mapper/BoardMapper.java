@@ -8,6 +8,9 @@ public interface BoardMapper {
 
 	public List<BoardVO> getList(int div);
 	public void write(BoardVO board);
-	public void update(BoardVO board);
-	public void remove(int bno);
+	public int update(BoardVO board);
+	public int remove(int bno);
+	public BoardVO get(int bno);
+	public void hit(int bno);
+	public String exist(int bno);
 }
