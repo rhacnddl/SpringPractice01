@@ -12,13 +12,13 @@
 <body>
 <c:if test="${division == 100}">
 	<div align="left">
-		<h2>자유게시판</h3></div>
-	<div>
+		<h2>자유게시판</h2>
+	</div>
 </c:if>
 <c:if test="${division == 101}">
 	<div align="left">
-		<h2>출석게시판</h3></div>
-	<div>
+		<h2>출석게시판</h2>
+	</div>
 </c:if>
 		<div align="center">
 			<form action="viewList">
@@ -33,7 +33,8 @@
 		<div class="button-default" align="center">
 			<a href="/board/write?div=${division}">게시글 작성</a>
 		</div>
-		<table border="1" bordercolor="black" width="700" height = "130" align="center">
+		<div>
+		<table border="1" width="700" height = "130" align="center" style="border-collapse: collapse;">
 			<tr bgcolor="yellow" align="center">
 				<th>No.</th>
 				<th>제목</th>
@@ -47,7 +48,11 @@
 				<tr><!-- 첫번째 줄 시작 -->
 			    <td align="center">${list.bno}</td>
 			<!-- 제목 옆 댓글 수 -->
-		    	<td align="left"><a href="/board/get?bno=${list.bno}"> ${list.title}</a></td>
+		    	<td align="center"><a href="/board/get?bno=${list.bno}"> ${list.title}</a>
+		    		<c:if test="${list.reply_Cnt > 0}">
+		    		<b style="color: red;">[${list.reply_Cnt}]</b>
+		    		</c:if>
+		    	</td>
 		    	<td align="center">${list.writer}</td>
 		    	<td align="center">${dateTempParse}</td>
 		    	<td align="center">${list.hit}</td>

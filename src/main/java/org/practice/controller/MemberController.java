@@ -1,5 +1,9 @@
 package org.practice.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.practice.domain.AuthVO;
 import org.practice.domain.MemberVO;
 import org.practice.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.Setter;
@@ -82,5 +87,33 @@ public class MemberController {
 		
 		log.info("Access Denied: " + auth);
 		model.addAttribute("msg", "Access Denied!");
+	}
+	
+	@GetMapping("/admin/grant")
+	@PreAuthorize("hasRole('ADMIN')")
+	public void grant(Model model) {
+		
+		log.info("===================================");
+		log.info("@Controller, Admin Grant");
+		
+		model.addAttribute("auth", service.memberList());
+	}
+	
+	@PostMapping("/admin/grant")
+	@PreAuthorize("hasRole('ADMIN')")
+	public String grant_post(AuthVO auth, RedirectAttributes rttr) {
+		
+		log.info("===================================");
+		log.info("@Controller, Grant_Post");
+		log.info("AuthVO : " + auth);
+		
+		if(!service.memberGrant(auth)) //성공하면 -1이 return된다. Why?
+			log.info("Update Request was Success");
+		else
+			log.info("Update Request was Fail, try again");
+		
+		log.info("===================================");
+		
+		return "redirect:/admin/grant";
 	}
 }

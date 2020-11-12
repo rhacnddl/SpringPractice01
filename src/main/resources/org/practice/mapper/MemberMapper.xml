@@ -11,7 +11,7 @@
 
 <insert id="defaultAuth">
 	INSERT INTO AUTH(AUTHORITY, USERID) 
-	VALUES('MEMBER', #{userid})
+	VALUES('ROLE_MEMBER', #{userid})
 </insert>
 
 <resultMap type="org.practice.domain.MemberVO" id="memberMap">
@@ -34,4 +34,15 @@
 	WHERE M.USERID = #{userid}
 </select>
 
+<select id="memberList" resultType="org.practice.domain.AuthVO">
+	SELECT * FROM AUTH ORDER BY AUTHORITY
+</select>
+
+<update id="memberGrant">
+	<foreach collection="list" item="auth" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
+	UPDATE AUTH SET 
+	AUTHORITY = #{auth.authority} 
+	WHERE USERID = #{auth.userid}
+	</foreach>
+</update>
 </mapper>

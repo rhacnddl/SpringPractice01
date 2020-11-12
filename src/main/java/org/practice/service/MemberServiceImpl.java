@@ -1,5 +1,9 @@
 package org.practice.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.practice.domain.AuthVO;
 import org.practice.domain.MemberVO;
 import org.practice.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,34 @@ public class MemberServiceImpl implements MemberService {
 		mapper.defaultAuth(userid);
 	}
 
+	@Override
+	public List<AuthVO> memberList(){
+		
+		log.info("===========================");
+		log.info("@Service, Get Member List");
+		
+		return mapper.memberList();
+	}
 	
-	
+	@Override
+	public boolean memberGrant(AuthVO auth) {
+
+		String[] id_list = auth.getUserid().split(",");
+		String[] auth_list = auth.getAuthority().split(",");
+		
+		List<AuthVO> list = new ArrayList<AuthVO>();
+		for(int i=0; i<id_list.length; i++) {
+			AuthVO vo = new AuthVO();
+			vo.setAuthority(auth_list[i]);
+			vo.setUserid(id_list[i]);
+			
+			list.add(vo);
+		}
+		
+		log.info("==============================");
+		log.info("@Service, MemberGrant List : " + list);
+		log.info("==============================");
+		
+		return mapper.memberGrant(list) == 1;
+	}
 }

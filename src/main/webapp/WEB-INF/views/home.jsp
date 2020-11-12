@@ -22,6 +22,9 @@
 </div>
 <div class="home-list">
 	<ul>
+		<sec:authorize access="hasRole('ADMIN')">
+		<li><a href="/admin/grant">멤버 권한 관리</a></li>
+		</sec:authorize>
 		<li><a href="/board/list?div=100">자유게시판</a></li>
 		<li><a href="/board/list?div=101">출석게시판</a></li>
 	</ul>

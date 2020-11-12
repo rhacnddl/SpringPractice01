@@ -8,6 +8,25 @@
 <head>
 <meta charset="UTF-8">
 <title>Board Get</title>
+<style type="text/css">
+.board-part-table{
+	border:1px solid;
+	border-collapse: collapse;
+	
+}
+.board-part{
+	border:1px solid;
+	
+}
+.board-part-input{
+	width:99%;
+	border:0;
+}
+.reply-part-table{}
+input:focus, textarea:focus{
+	outline:none;
+}
+</style>
 </head>
 <body>
 
@@ -21,45 +40,46 @@
 <div class="table-default" align="center">
 
 	<a href="/board/list?div=${division}">목록</a>
-	<table>
+	<table class="board-part-table">
 		<tbody>
 			<tr class="board-part">
-				<th>Category</th>
-				<td>
+				<th class="board-part">Category</th>
+				<td class="board-part">
 				<c:if test="${division eq 100}">
-					<input type="text" name="div" value="자유게시판" readonly="readonly">
+					<input type="text" name="div" value="자유게시판" readonly="readonly" class="board-part-input">
 				</c:if>
 				<c:if test="${division eq 101}">
-					<input type="text" name="div" value="인사게시판" readonly="readonly">
+					<input type="text" name="div" value="인사게시판" readonly="readonly" class="board-part-input">
 				</c:if>
 				</td>
 			</tr>
 			<tr class="board-part">
-				<th>Board No.</th>
-				<td><input type="text" name="bno" value="${board.bno}" readonly="readonly"></td>
+				<th class="board-part">Board No.</th>
+				<td class="board-part"><input type="text" class="board-part-input" name="bno" value="${board.bno}" readonly="readonly"></td>
 			</tr>
 			<tr class="board-part">
-				<th>Title</th>
-				<td><input type="text" name="title" value="${board.title}" readonly="readonly"></td>
-				
-				<th>Hit</th>
-				<td><input type="text" name="hit" value="${board.hit}" readonly="readonly"></td>
+				<th class="board-part">Title</th>
+				<td class="board-part"><input type="text" class="board-part-input" name="title" value="${board.title}" readonly="readonly"></td>
 			</tr>
 			<tr class="board-part">
-				<th>Content</th>
-				<td><textarea rows="8" cols="60" name="content" readonly="readonly">${board.content}</textarea></td>
+				<th class="board-part">Content</th>
+				<td class="board-part"><textarea rows="4" cols="70" style="resize:none;height:99%;" class="board-part-input" name="content" readonly="readonly">${board.content}</textarea></td>
 			</tr>
 			<tr class="board-part">
-				<th>Writer</th>
-				<td><input type="text" name="writer" value="${board.writer}" readonly="readonly"></td>
+				<th class="board-part">Hit</th>
+				<td class="board-part"><input type="text" class="board-part-input" name="hit" value="${board.hit}" readonly="readonly"></td>
 			</tr>
 			<tr class="board-part">
-				<th>Write Date</th>
-				<td><input type="text" name="regDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.regDate}"/>" readonly="readonly"></td>
+				<th class="board-part">Writer</th>
+				<td class="board-part"><input type="text" class="board-part-input" name="writer" value="${board.writer}" readonly="readonly"></td>
 			</tr>
 			<tr class="board-part">
-				<th>Update Date</th>
-				<td><input type="text" name="updateDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/>" readonly="readonly"></td>
+				<th class="board-part">Write Date</th>
+				<td class="board-part"><input type="text" class="board-part-input" name="regDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.regDate}"/>" readonly="readonly"></td>
+			</tr>
+			<tr class="board-part-tr">
+				<th class="board-part">Update Date</th>
+				<td class="board-part"><input type="text" class="board-part-input" name="updateDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/>" readonly="readonly"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -83,38 +103,68 @@
 <!-- 이하 댓글창 -->
 <div class="reply-first-frame" align="center">
 	<label>Reply</label>
-	<div class="reply-second-frame">
+	<div class="reply-second-frame" style="border:3px solid">
+		<!-- 댓글 작성 div -->
 		<div class="reply-write">
 			<form class="form-reply-write" action="/reply/write" method="post">
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 				<input type="text" name="content">
+				
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 				<input type="hidden" name="writer" value="${pr.username}">
 				<input type="hidden" name="bno" value="${board.bno}">
-				<input type="submit" value="작성">
+				<button type="submit">작성</button>
 			</form>
 		</div>
+		<!-- 댓글 작성 div -->
+		<!-- 댓글 리스트 div -->
 		<div class="reply-list">
 			<table>
 				<tbody>
 					<c:forEach items="${reply}" var="r">
+						<c:if test="${r.r_rno == null || r.r_rno == 0}">
 						<tr>
-							<th>${r.writer} : </th>
-							<td> ${r.content} / </td>
-							<td> <fmt:formatDate value="${r.regDate}" pattern="yy-MM-dd"/> </td>
+							<th>${r.writer} </th>
+							<td> : ${r.content}  </td>
+							<td> / <fmt:formatDate value="${r.regDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 							<c:if test="${r.updateDate != null}">
-								<td>/ <fmt:formatDate value="${r.updateDate}" pattern="yy-MM-dd"/> </td>
+								<td> / <fmt:formatDate value="${r.updateDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 							</c:if>
-							<c:if test="${r.writer == pr.username}">
+								
 								<td>
-								<button name="modify" class="button-default">수정</button>
-								<button name="remove" class="button-default">삭제</button>
+								<button name="r_reply" class="button-default">답글</button>
+								<c:if test="${r.writer == pr.username}">
+									<button name="modify" class="button-default">수정</button>
+									<button name="remove" class="button-default">삭제</button>
+								</c:if>
 								</td>
-							</c:if>
 						</tr>
+						</c:if>
+						<!-- 대댓글 부분 -->
+						<c:forEach var="r_r" items="${reply}">
+							<c:if test="${r_r.r_rno == r.rno}">
+								<tr>
+									<th>${r.writer} <- ${r_r.writer}</th>
+									<td> : ${r_r.content}  </td>
+									<td> / <fmt:formatDate value="${r_r.regDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
+									<c:if test="${r.updateDate != null}">
+										<td> / <fmt:formatDate value="${r_r.updateDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
+									</c:if>
+										
+									<td>
+									<c:if test="${r_r.writer == pr.username}">
+										<button name="modify" class="button-default">수정</button>
+										<button name="remove" class="button-default">삭제</button>
+									</c:if>
+									</td>
+								</tr>
+							</c:if>
+						</c:forEach>
+						
 					</c:forEach>
 				</tbody>
 			</table>
 		</div>
+		<!-- 댓글 리스트 div -->
 	</div>
 </div>
 
@@ -124,6 +174,12 @@
 $(document).ready(function(){
 	
 	var bnoValue = ${board.bno};
+	
+	$("button[name='r_reply']").on("click", function(e){
+		
+		
+		
+	});
 	
 });
 </script>
