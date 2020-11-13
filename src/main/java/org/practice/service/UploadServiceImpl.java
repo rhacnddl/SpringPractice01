@@ -1,0 +1,40 @@
+package org.practice.service;
+
+import java.util.List;
+
+import org.practice.domain.FileVO;
+import org.practice.mapper.UploadMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@Service
+@Log4j
+public class UploadServiceImpl implements UploadService{
+
+	@Setter(onMethod_ = @Autowired)
+	private UploadMapper mapper;
+	
+	@Override
+	public void fileUpload(List<FileVO> list) {
+		
+		log.info("===================================");
+		log.info("@Service, UploadService File Upload : " + list);
+		log.info("===================================");
+		
+		mapper.upload(list);
+	}
+	
+	@Override
+	public List<FileVO> getFileList(int bno) {
+		
+		log.info("===================================");
+		log.info("@Service, UploadService Get File List By BNO : " + bno);
+		log.info("===================================");
+		
+		return mapper.getFileList(bno);
+	}
+}

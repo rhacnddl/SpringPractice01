@@ -72,4 +72,24 @@ public class MemberServiceImpl implements MemberService {
 		
 		return mapper.memberGrant(list) == 1;
 	}
+	
+	@Override
+	public MemberVO read(String userid) {
+		
+		log.info("==============================");
+		log.info("@Service, Member Read By User ID: " + userid);
+		log.info("==============================");
+		
+		return mapper.read(userid);
+	}
+	
+	@Override
+	public boolean update(MemberVO member) {
+		
+		log.info("==============================");
+		log.info("@Service, Update Member Info : " + member);
+		log.info("==============================");
+		
+		return mapper.updateMember(member) == 1;
+	}
 }

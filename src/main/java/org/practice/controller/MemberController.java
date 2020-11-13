@@ -3,6 +3,7 @@ package org.practice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.practice.domain.AuthVO;
 import org.practice.domain.MemberVO;
 import org.practice.service.MemberService;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
+import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
 @Log4j
@@ -115,5 +117,29 @@ public class MemberController {
 		log.info("===================================");
 		
 		return "redirect:/admin/grant";
+	}
+	
+	@GetMapping("/member/info")
+	@PreAuthorize("principal.username == #userid")
+	public void info(@Param("userid") String userid, Model model) {
+		
+		log.info("==============================");
+		log.info("@Controller, Member Read By User ID : " + userid);
+		log.info("==============================");
+		
+		model.addAttribute("member", service.read(userid));
+	}
+	
+	@PostMapping("/member/info")
+	//@PreAuthorize("principal.username == #userid")
+	public String info_Post(MemberVO member, RedirectAttributes rttr) {
+		
+		log.info("==============================");
+		log.info("@Controller, Member's Info Change Request : " + member);
+		log.info("==============================");
+		
+		service.update(member);
+		
+		return "redirect:/member/info?userid=" + member.getUserid();
 	}
 }

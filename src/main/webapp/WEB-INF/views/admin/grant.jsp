@@ -78,6 +78,9 @@
 	</form>
 
 </div>
+<div>
+	<a href="/home">이전페이지</a>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">

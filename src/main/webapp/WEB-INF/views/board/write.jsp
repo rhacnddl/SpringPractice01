@@ -14,7 +14,7 @@
 <sec:authentication var="writer" property='principal.username'/>
 
 <div class="form-board-write" align="center">
-	<form action="/board/write" method="post">
+	<form action="/board/write" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		<div class="form-default">
 			<label>Category</label>
@@ -36,6 +36,10 @@
 		<div class="form-default">
 			<label>Writer</label>
 			<input name="writer" value="${writer}" readonly="readonly">
+		</div>
+		<!-- File Upload -->
+		<div class="form-default">
+			<input type="file" name="uploadFile" multiple="multiple">
 		</div>
 		<button>Submit</button>
 	</form>

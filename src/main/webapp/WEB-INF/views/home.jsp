@@ -10,6 +10,8 @@
 </head>
 <body>
 
+<sec:authentication property="principal" var="pr"/>
+
 <h1>HOME</h1>
 <div class="user-info">
 	<sec:authentication property="principal.member.userid"/> 님 환영합니다.
@@ -25,6 +27,7 @@
 		<sec:authorize access="hasRole('ADMIN')">
 		<li><a href="/admin/grant">멤버 권한 관리</a></li>
 		</sec:authorize>
+		<li><a href="/member/info?userid=${pr.username}">개인정보</a></li>
 		<li><a href="/board/list?div=100">자유게시판</a></li>
 		<li><a href="/board/list?div=101">출석게시판</a></li>
 	</ul>

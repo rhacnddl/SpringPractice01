@@ -45,4 +45,11 @@
 	WHERE USERID = #{auth.userid}
 	</foreach>
 </update>
+
+<update id="updateMember">
+	UPDATE MEMBER SET
+	USERNAME = #{username},
+	EMAIL = #{email}
+	WHERE USERID = #{userid}
+</update>
 </mapper>

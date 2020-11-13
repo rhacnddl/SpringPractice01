@@ -14,4 +14,5 @@ public interface MemberMapper {
 	
 	public List<AuthVO> memberList();
 	public int memberGrant(List<AuthVO> list);
+	public int updateMember(MemberVO member);
 }

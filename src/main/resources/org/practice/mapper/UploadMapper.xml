@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org//dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.practice.mapper.UploadMapper">
+
+<insert id="upload">
+	<foreach collection="list" open="DECLARE BEGIN" close="; END;" separator=";" item="file">
+		INSERT INTO FILES(BNO, FILENAME, PATH, UUID, FILETYPE)
+		VALUES(BNO_SEQ.CURRVAL, #{file.fileName}, #{file.path}, #{file.uuid}, #{file.fileType})
+	</foreach>
+</insert>
+
+<select id="getFileList" resultType="org.practice.domain.FileVO">
+	SELECT * FROM FILES WHERE BNO = #{bno}
+</select>
+
+</mapper>

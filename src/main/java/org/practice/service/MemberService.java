@@ -12,4 +12,7 @@ public interface MemberService {
 	
 	public List<AuthVO> memberList();
 	public boolean memberGrant(AuthVO auth);
+	
+	public MemberVO read(String userid);
+	public boolean update(MemberVO member);
 }

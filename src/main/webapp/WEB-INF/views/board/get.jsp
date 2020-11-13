@@ -36,7 +36,7 @@ input:focus, textarea:focus{
 <div align="center">
 	<h1>Board Get</h1>
 </div>
-
+<!-- Board 정보 Part -->
 <div class="table-default" align="center">
 
 	<a href="/board/list?div=${division}">목록</a>
@@ -84,6 +84,16 @@ input:focus, textarea:focus{
 		</tbody>
 	</table>
 </div>
+<!-- Board 정보 Part -->
+<!-- File Part -->
+<div align="center">
+	<ul>
+		<c:forEach items="${file}" var="f">
+		<li><a href="${f.fileName}">${f.fileName}</a></li>
+		</c:forEach>
+	</ul>
+</div>
+<!-- File Part -->
 <div align="center">
 	<a href="/board/list?div=${division}">목록</a>
 	<form class="form-default" action="/board/update">
