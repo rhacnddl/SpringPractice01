@@ -1,7 +1,12 @@
 package org.practice.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -10,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.practice.domain.BoardVO;
 import org.practice.domain.FileVO;
@@ -141,6 +148,59 @@ public class BoardController {
 		return "redirect:/board/list?div=" + div;
 	}
 	
+	/*
+	@GetMapping(value="/download")
+	public void download(@RequestHeader("User-Agent") String agent, HttpServletResponse response, String uuid) throws UnsupportedEncodingException {
+		
+		FileVO file = upload_service.getFile(uuid);
+		
+		String fileName = file.getFileName();
+		String path = "C:\\upload\\" + file.getPath() + "\\";
+		String downloadPath = path + file.getUuid() + "_" + file.getFileName();
+		
+		String downloadFileName = "";
+		
+		File saveFile = new File(downloadPath);
+		
+		if(agent.contains("Trident")) {
+			downloadFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\", " ");
+			log.info("IE Browser, File Name : " + downloadFileName);
+		}
+		else if(agent.contains("Edge")) {
+			downloadFileName = URLEncoder.encode(fileName, "UTF-8");
+			log.info("Edge Browser, File Name : " + downloadFileName);
+		}
+		else {
+			downloadFileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+			log.info("Chrome Browser, File Name : " + downloadFileName);
+		}
+		
+		response.setHeader("Content-Type", "application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=" + downloadFileName);
+		
+		int length;
+		byte[] buffer = new byte[1024];
+		
+		try {
+			InputStream is = new FileInputStream(saveFile);
+			OutputStream os = response.getOutputStream();
+			
+			while((length = is.read(buffer)) != -1) {
+				os.write(buffer, 0, length);
+			}
+			os.flush();
+			os.close();
+			is.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	*/
+	
 	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody //서버->클라이언트로 응답을 전송할 때 Body에 데이터 담아보냄
 	public ResponseEntity<Resource> download(@RequestHeader("User-Agent") String agent, String uuid) {
@@ -189,53 +249,6 @@ public class BoardController {
 		return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
 	}
 	
-	
-	
-	/*
-	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	@ResponseBody
-	public ResponseEntity<Resource> downloadFile(@RequestHeader("User-Agent") String userAgent, String fileName) throws UnsupportedEncodingException{
-		
-		String downName = path + "\\" + uuid + "_" + fileName;
-		
-		Resource resource = new FileSystemResource("C:\\upload\\" + downName);
-		
-		if(!resource.exists())
-			return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
-		
-		log.info("resource : " + resource);
-		
-		String resourceName = resource.getFilename();
-		String originalFileName = "";
-		if(resourceName.contains("_")) {
-			originalFileName = resourceName.substring(resourceName.lastIndexOf("_") + 1);
-			log.info("OriginalFileName = " + originalFileName);
-		}
-		else {
-			originalFileName = resourceName;
-			log.info("OriginalFileName = " + originalFileName);
-		}
-		String downloadName = "";
-		HttpHeaders header = new HttpHeaders();
-
-		if(userAgent.contains("Trident")) {
-			downloadName = URLEncoder.encode(originalFileName, "UTF-8").replaceAll("\\+", " ");
-			log.info("IE Browser , downloadName = " + downloadName);
-		}
-		else if(userAgent.contains("Edge")) {
-			downloadName = URLEncoder.encode(originalFileName, "UTF-8");
-			log.info("Edge Browser , downloadName = " + downloadName);
-		}
-		else {
-			downloadName = new String(originalFileName.getBytes("UTF-8"), "ISO-8859-1");
-			log.info("Chrome Browser , downloadName = " + downloadName);
-		}
-		
-		header.add("Content-Disposition", "attachment; filename=" + downloadName);
-		
-		return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
-	}
-	*/
 	
 	/* ======================================================= */
 	
