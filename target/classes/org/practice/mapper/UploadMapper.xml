@@ -15,4 +15,8 @@
 	SELECT * FROM FILES WHERE BNO = #{bno}
 </select>
 
+<select id="getFile" resultType="org.practice.domain.FileVO">
+	SELECT * FROM FILES WHERE UUID = #{uuid}
+</select>
+
 </mapper>

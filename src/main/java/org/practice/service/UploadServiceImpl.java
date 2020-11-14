@@ -37,4 +37,14 @@ public class UploadServiceImpl implements UploadService{
 		
 		return mapper.getFileList(bno);
 	}
+	
+	@Override
+	public FileVO getFile(String uuid) {
+		
+		log.info("===================================");
+		log.info("@Service, UploadService Get File By UUID : " + uuid);
+		log.info("===================================");		
+		
+		return mapper.getFile(uuid);
+	}
 }

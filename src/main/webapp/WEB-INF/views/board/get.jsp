@@ -89,7 +89,7 @@ input:focus, textarea:focus{
 <div align="center">
 	<ul>
 		<c:forEach items="${file}" var="f">
-		<li><a href="${f.fileName}">${f.fileName}</a></li>
+		<li><a href="/board/download?uuid=${f.uuid}">${f.fileName}</a></li>
 		</c:forEach>
 	</ul>
 </div>

@@ -2,6 +2,8 @@ package org.practice.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,14 +18,22 @@ import org.practice.service.BoardService;
 import org.practice.service.ReplyService;
 import org.practice.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -131,6 +141,101 @@ public class BoardController {
 		return "redirect:/board/list?div=" + div;
 	}
 	
+	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody //서버->클라이언트로 응답을 전송할 때 Body에 데이터 담아보냄
+	public ResponseEntity<Resource> download(@RequestHeader("User-Agent") String agent, String uuid) {
+		
+		FileVO file = upload_service.getFile(uuid);
+		String path = "C:\\upload\\" + file.getPath() + "\\";
+		
+		Resource resource = new FileSystemResource(path + uuid + "_" + file.getFileName());
+		
+		if(!resource.exists())
+			return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+		
+		log.info("Resource : " + resource);
+		
+		String resourceFileName = resource.getFilename();
+		String originalFileName = resourceFileName;
+		String downloadFileName = "";
+		
+		if(resourceFileName.contains("_"))
+			originalFileName = resourceFileName.substring(resourceFileName.lastIndexOf("_") + 1);
+		
+		log.info("Original File Name : " + originalFileName);
+		
+		try {
+			if(agent.contains("IE") || agent.contains("Trident")) {
+				downloadFileName = URLEncoder.encode(downloadFileName, "UTF-8").replaceAll("\\", " ");
+				log.info("IE Browser , downloadName = " + downloadFileName);
+			}
+			else if(agent.contains("Edge")) {
+				
+				downloadFileName = URLEncoder.encode(downloadFileName, "UTF-8");
+				log.info("Edge Browser , downloadName = " + downloadFileName);
+			}
+			else {
+				downloadFileName = new String(originalFileName.getBytes("UTF-8"), "ISO-8859-1");
+				log.info("Chrome Browser , downloadName = " + downloadFileName);
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		HttpHeaders header = new HttpHeaders();
+		
+		header.add("Content-Disposition", "attachment; filename=" + downloadFileName);
+		
+		return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
+	}
+	
+	
+	
+	/*
+	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(@RequestHeader("User-Agent") String userAgent, String fileName) throws UnsupportedEncodingException{
+		
+		String downName = path + "\\" + uuid + "_" + fileName;
+		
+		Resource resource = new FileSystemResource("C:\\upload\\" + downName);
+		
+		if(!resource.exists())
+			return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+		
+		log.info("resource : " + resource);
+		
+		String resourceName = resource.getFilename();
+		String originalFileName = "";
+		if(resourceName.contains("_")) {
+			originalFileName = resourceName.substring(resourceName.lastIndexOf("_") + 1);
+			log.info("OriginalFileName = " + originalFileName);
+		}
+		else {
+			originalFileName = resourceName;
+			log.info("OriginalFileName = " + originalFileName);
+		}
+		String downloadName = "";
+		HttpHeaders header = new HttpHeaders();
+
+		if(userAgent.contains("Trident")) {
+			downloadName = URLEncoder.encode(originalFileName, "UTF-8").replaceAll("\\+", " ");
+			log.info("IE Browser , downloadName = " + downloadName);
+		}
+		else if(userAgent.contains("Edge")) {
+			downloadName = URLEncoder.encode(originalFileName, "UTF-8");
+			log.info("Edge Browser , downloadName = " + downloadName);
+		}
+		else {
+			downloadName = new String(originalFileName.getBytes("UTF-8"), "ISO-8859-1");
+			log.info("Chrome Browser , downloadName = " + downloadName);
+		}
+		
+		header.add("Content-Disposition", "attachment; filename=" + downloadName);
+		
+		return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
+	}
+	*/
 	
 	/* ======================================================= */
 	
