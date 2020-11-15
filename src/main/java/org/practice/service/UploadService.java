@@ -10,4 +10,5 @@ public interface UploadService {
 	public void fileUpload(List<FileVO> list);
 	public List<FileVO> getFileList(int bno);
 	public FileVO getFile(String uuid);
+	public boolean deleteFile(String uuid);
 }

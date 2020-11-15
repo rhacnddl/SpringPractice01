@@ -89,7 +89,17 @@ input:focus, textarea:focus{
 <div align="center">
 	<ul>
 		<c:forEach items="${file}" var="f">
-		<li><a href="/board/download?uuid=${f.uuid}">${f.fileName}</a></li>
+		<li>
+		<a href="/board/download?uuid=${f.uuid}">${f.fileName}</a>
+		<c:if test="${pr.username == board.writer}">
+		<form action="/board/deleteFile" method="post">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+			<input type="hidden" name="uuid" value="${f.uuid}">
+			<input type="hidden" name="bno" value="${board.bno}">
+			<button type="submit">X</button>
+		</form>
+		</c:if>
+		</li>
 		</c:forEach>
 	</ul>
 </div>

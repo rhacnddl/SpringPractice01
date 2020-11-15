@@ -47,4 +47,14 @@ public class UploadServiceImpl implements UploadService{
 		
 		return mapper.getFile(uuid);
 	}
+	
+	@Override
+	public boolean deleteFile(String uuid) {
+		
+		log.info("===================================");
+		log.info("@Service, UploadService Delete File By UUID : " + uuid);
+		log.info("===================================");
+		
+		return mapper.deleteFile(uuid) == 1;
+	}
 }

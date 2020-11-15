@@ -200,6 +200,26 @@ public class BoardController {
 		}
 	}
 	*/
+
+	@PostMapping(value = "/deleteFile")
+	public String deleteFile(String uuid, int bno, RedirectAttributes rttr) throws UnsupportedEncodingException {
+		
+		FileVO vo = upload_service.getFile(uuid);
+		String path = "C:\\upload\\" + vo.getPath() + "\\";
+		String fileName = uuid + "_" + vo.getFileName();
+		
+		File file = new File(path + fileName);
+		log.info(file.getAbsolutePath());
+		if(file.delete()) {
+			upload_service.deleteFile(uuid);
+			rttr.addAttribute("msg", "file was deleted");
+			log.info("Delete File UUID : " + uuid + " File Name : " + vo.getFileName());
+		}
+		else 
+			log.info("Can't Delete File UUID : " + uuid + " File Name : " + vo.getFileName());
+		
+		return "redirect:/board/get?bno=" + bno;
+	}
 	
 	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody //서버->클라이언트로 응답을 전송할 때 Body에 데이터 담아보냄
