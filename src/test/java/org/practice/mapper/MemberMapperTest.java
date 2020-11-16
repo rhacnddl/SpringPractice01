@@ -18,6 +18,7 @@ public class MemberMapperTest {
 	@Setter(onMethod_ = @Autowired)
 	private MemberMapper mapper;
 	
+	/*
 	@Test
 	public void createTest() {
 		
@@ -29,5 +30,14 @@ public class MemberMapperTest {
 		vo.setEmail("test2@naver.com");
 		
 		mapper.createAccount(vo);
+	}
+	*/
+	@Test
+	public void readTest() {
+		MemberVO vo = mapper.read("admin");
+		
+		log.info(vo);
+		
+		vo.getAuthList().forEach(authVO -> log.info(authVO));
 	}
 }

@@ -27,6 +27,15 @@ public class UploadServiceImpl implements UploadService{
 		
 		mapper.upload(list);
 	}
+	@Override
+	public void fileUpdate(List<FileVO> list, int bno) {
+		// TODO Auto-generated method stub
+		log.info("===================================");
+		log.info("@Service, UploadService File Update : " + list + " BNO : " + bno);
+		log.info("===================================");
+		
+		mapper.update(list, bno);
+	}
 	
 	@Override
 	public List<FileVO> getFileList(int bno) {

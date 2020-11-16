@@ -86,7 +86,7 @@ public class BoardController {
 		service.write(board);
 		
 		if(uploadFile[0].getSize() != 0) {
-			fileUpload(uploadFile);
+			fileUpload(uploadFile, 0);
 		}
 		log.info("================================");
 		
@@ -105,7 +105,7 @@ public class BoardController {
 		
 		service.hit(bno);
 		model.addAttribute("board", service.get(bno));
-		model.addAttribute("file", upload_service.getFileList(bno));
+		//model.addAttribute("file", upload_service.getFileList(bno));
 		model.addAttribute("reply", reply_service.list(bno));
 	}
 	
@@ -117,12 +117,17 @@ public class BoardController {
 		log.info("===============================");
 		
 		model.addAttribute("board", service.get(bno));
-		model.addAttribute("file", upload_service.getFileList(bno));
+		//model.addAttribute("file", upload_service.getFileList(bno));
 	}
 	@PostMapping("/update")
-	public String update(BoardVO board, RedirectAttributes rttr) {
+	public String update(BoardVO board, @RequestParam("uploadFile") MultipartFile[] uploadFile, RedirectAttributes rttr) {
 		
 		if(service.update(board)) {
+			
+			if(uploadFile[0].getSize() != 0) {
+				fileUpload(uploadFile, board.getBno());
+			}
+			
 			rttr.addAttribute("msg", "Update Success");
 			log.info("Update Board : " + board);
 		}
@@ -140,8 +145,12 @@ public class BoardController {
 		
 		int div = service.get(bno).getDiv();
 		
-		if(service.remove(bno))
+		if(service.remove(bno)) {
+			List<FileVO> list = upload_service.getFileList(bno);
+			log.info("Remove Board's Files : " + list);
+			list.forEach(vo -> upload_service.deleteFile(vo.getUuid()));
 			log.info("Remove Board Bno : " + bno);
+		}
 		else
 			log.warn("Can't Remove Board Bno : " + bno);
 		
@@ -209,6 +218,7 @@ public class BoardController {
 		String fileName = uuid + "_" + vo.getFileName();
 		
 		File file = new File(path + fileName);
+		
 		log.info(file.getAbsolutePath());
 		if(file.delete()) {
 			upload_service.deleteFile(uuid);
@@ -218,7 +228,7 @@ public class BoardController {
 		else 
 			log.info("Can't Delete File UUID : " + uuid + " File Name : " + vo.getFileName());
 		
-		return "redirect:/board/get?bno=" + bno;
+		return "redirect:/board/update?bno=" + bno;
 	}
 	
 	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
@@ -272,7 +282,7 @@ public class BoardController {
 	
 	/* ======================================================= */
 	
-	public void fileUpload(MultipartFile[] uploadFile) {
+	public void fileUpload(MultipartFile[] uploadFile, int bno) {
 		
 		String path = "C:\\upload";
 		String uploadFolderPath = getFolder();
@@ -324,8 +334,10 @@ public class BoardController {
 			}
 			
 		} //for(MultipartFile file : uploadFile)
-		
-		upload_service.fileUpload(list);
+		if(bno == 0)
+			upload_service.fileUpload(list);
+		else
+			upload_service.fileUpdate(list, bno);
 	}
 	
 	public String getFolder() {

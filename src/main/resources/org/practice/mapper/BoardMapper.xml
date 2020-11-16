@@ -34,9 +34,32 @@
 	UPDATE BOARD SET HIT = HIT + 1 WHERE BNO = #{bno}
 </update>
 
-<select id="get" resultType="org.practice.domain.BoardVO">
-	SELECT * FROM BOARD WHERE BNO = #{bno}
+<resultMap type="org.practice.domain.BoardVO" id="boardMap">
+	<id property="bno" column="BNO"/>
+	<result property="bno" column="BNO"/>
+	<result property="title" column="TITLE"/>
+	<result property="content" column="CONTENT"/>
+	<result property="writer" column="WRITER"/>
+	<result property="regDate" column="REGDATE"/>
+	<result property="updateDate" column="UPDATEDATE"/>
+	<result property="div" column="DIV"/>
+	<result property="hit" column="HIT"/>
+	<collection column="fileList" property="fileList" resultMap="fileMap">
+	</collection>
+</resultMap>
+
+<resultMap type="org.practice.domain.FileVO" id="fileMap" >
+	<result property="fileName" column="FILENAME"/>
+	<result property="uuid" column="UUID"/>
+</resultMap>
+
+<select id="get" resultMap="boardMap">
+	SELECT B.BNO, TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE, DIV, HIT, FILENAME, UUID 
+	FROM BOARD B 
+	LEFT OUTER JOIN FILES F ON B.BNO = F.BNO 
+	WHERE B.BNO = #{bno}
 </select>
+
 
 <select id="exist" resultType="string">
 	SELECT WRITER FROM BOARD WHERE BNO = #{bno}

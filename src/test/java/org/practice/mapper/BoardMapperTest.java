@@ -56,7 +56,6 @@ public class BoardMapperTest {
 		else
 			log.info("BNO " + bno + " is not exist");
 	}
-	*/
 	
 	@Test
 	public void updateTest() {
@@ -72,5 +71,13 @@ public class BoardMapperTest {
 			log.info(board);
 			mapper.update(board);
 		}
+	}
+	*/
+	@Test
+	public void getTest() {
+		
+		int bno = 29;
+		BoardVO vo = mapper.get(bno);
+		log.info(vo);
 	}
 }

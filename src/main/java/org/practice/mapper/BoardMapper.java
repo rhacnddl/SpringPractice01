@@ -3,6 +3,7 @@ package org.practice.mapper;
 import java.util.List;
 
 import org.practice.domain.BoardVO;
+import org.practice.domain.FileVO;
 
 public interface BoardMapper {
 
@@ -10,7 +11,10 @@ public interface BoardMapper {
 	public void write(BoardVO board);
 	public int update(BoardVO board);
 	public int remove(int bno);
+	
 	public BoardVO get(int bno);
+	public FileVO getFile(int bno);
+	
 	public void hit(int bno);
 	public String exist(int bno);
 	

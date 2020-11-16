@@ -88,17 +88,9 @@ input:focus, textarea:focus{
 <!-- File Part -->
 <div align="center">
 	<ul>
-		<c:forEach items="${file}" var="f">
+		<c:forEach items="${board.fileList}" var="f">
 		<li>
 		<a href="/board/download?uuid=${f.uuid}">${f.fileName}</a>
-		<c:if test="${pr.username == board.writer}">
-		<form action="/board/deleteFile" method="post">
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-			<input type="hidden" name="uuid" value="${f.uuid}">
-			<input type="hidden" name="bno" value="${board.bno}">
-			<button type="submit">X</button>
-		</form>
-		</c:if>
 		</li>
 		</c:forEach>
 	</ul>
@@ -144,27 +136,30 @@ input:focus, textarea:focus{
 						<c:if test="${r.r_rno == null || r.r_rno == 0}">
 						<tr>
 							<th>${r.writer} </th>
-							<td> : ${r.content}  </td>
+							<td> : <input type="text" value="${r.content}" readonly>  </td>
 							<td> / <fmt:formatDate value="${r.regDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 							<c:if test="${r.updateDate != null}">
 								<td> / <fmt:formatDate value="${r.updateDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 							</c:if>
 								
 								<td>
-								<button name="r_reply" class="button-default">답글</button>
+								<button name="r_reply" class="btn-reply-r_reply">답글</button>
 								<c:if test="${r.writer == pr.username}">
-									<button name="modify" class="button-default">수정</button>
-									<button name="remove" class="button-default">삭제</button>
+									<button name="modify" class="btn-reply-update">수정</button>
+									<button name="remove" class="btn-reply-remove">삭제</button>
 								</c:if>
 								</td>
 						</tr>
 						</c:if>
+						<tr id="tr-r_reply">
+							
+						</tr>
 						<!-- 대댓글 부분 -->
 						<c:forEach var="r_r" items="${reply}">
 							<c:if test="${r_r.r_rno == r.rno}">
 								<tr>
 									<th>${r.writer} <- ${r_r.writer}</th>
-									<td> : ${r_r.content}  </td>
+									<td> : <input type="text" value="${r_r.content}" readonly>  </td>
 									<td> / <fmt:formatDate value="${r_r.regDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 									<c:if test="${r.updateDate != null}">
 										<td> / <fmt:formatDate value="${r_r.updateDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
@@ -172,8 +167,8 @@ input:focus, textarea:focus{
 										
 									<td>
 									<c:if test="${r_r.writer == pr.username}">
-										<button name="modify" class="button-default">수정</button>
-										<button name="remove" class="button-default">삭제</button>
+										<button name="modify" class="btn-reply-update">수정</button>
+										<button name="remove" class="btn-reply-remove">삭제</button>
 									</c:if>
 									</td>
 								</tr>
@@ -195,11 +190,6 @@ $(document).ready(function(){
 	
 	var bnoValue = ${board.bno};
 	
-	$("button[name='r_reply']").on("click", function(e){
-		
-		
-		
-	});
 	
 });
 </script>

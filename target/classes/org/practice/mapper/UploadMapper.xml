@@ -11,6 +11,13 @@
 	</foreach>
 </insert>
 
+<insert id="update">
+	<foreach collection="list" open="DECLARE BEGIN" close="; END;" separator=";" item="file">
+		INSERT INTO FILES(BNO, FILENAME, PATH, UUID, FILETYPE)
+		VALUES(#{bno}, #{file.fileName}, #{file.path}, #{file.uuid}, #{file.fileType})
+	</foreach>
+</insert>
+
 <select id="getFileList" resultType="org.practice.domain.FileVO">
 	SELECT * FROM FILES WHERE BNO = #{bno}
 </select>

@@ -1,6 +1,7 @@
 package org.practice.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -16,5 +17,6 @@ public class BoardVO {
 	private Date regDate;
 	private Date updateDate;
 	
+	private List<FileVO> fileList;
 	private int reply_Cnt;
 }

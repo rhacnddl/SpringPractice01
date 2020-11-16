@@ -12,7 +12,10 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<security:http>
-	
+		<security:headers>
+			<security:frame-options disabled="true" />
+		</security:headers>
+		
 		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
 		<security:logout logout-url="/customLogout" invalidate-session="true" delete-cookies="JSESSIONID, remember-me"/>
 		<security:access-denied-handler ref="customAccessDenied"/>

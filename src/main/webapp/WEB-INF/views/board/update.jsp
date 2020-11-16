@@ -37,7 +37,7 @@ input:focus, textarea:focus{
 
 <div class="table-default" align="center">
 	<a href="/board/get?bno=${bno}">이전</a>
-	<form action="/board/update" method="post">
+	<form action="/board/update" method="post" enctype="multipart/form-data">
 		<table class="board-part-table">
 			<tbody>
 				<tr class="board-part">
@@ -79,12 +79,32 @@ input:focus, textarea:focus{
 					<th class="board-part">Update Date</th>
 					<td class="board-part"><input type="text" class="board-part-input" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/>" readonly="readonly"></td>
 				</tr>
+				<tr>
+					<th class="board-part">File<th>
+					<td class="board-part"><input type="file" class="board-part-input" name="uploadFile" multiple></td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		<input type="hidden" name="div" value="${division}">
 		<input type="submit" value="수정하기">
 	</form>
+</div>
+<div align="center">
+	<ul>
+	<c:forEach items="${board.fileList}" var="f">
+		<li>
+		<a href="/board/download?uuid=${f.uuid}">${f.fileName}</a>
+		<form action="/board/deleteFile" method="post">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+		<input type="hidden" name="uuid" value="${f.uuid}">
+		<input type="hidden" name="bno" value="${board.bno}">
+		<button type="submit">X</button>
+		</form>
+		</li>
+	</c:forEach>
+	</ul>
+	
 </div>
 <div align="center">
 	<a href="/board/get?bno=${bno}">이전</a>
@@ -96,6 +116,8 @@ input:focus, textarea:focus{
 $(document).ready(function(){
 	
 	var bnoValue = ${board.bno};
+	var arr = ${board.fileList};
+	
 	
 });
 </script>

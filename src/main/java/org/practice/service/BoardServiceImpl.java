@@ -34,7 +34,7 @@ public class BoardServiceImpl implements BoardService{
 		
 		if(mapper.exist(bno) != null) {
 			log.info("===================================");
-			log.info("GET BNO : " + bno);
+			log.info("@Servcie, GET BNO : " + bno);
 			log.info("===================================");
 			return mapper.get(bno);
 		}
