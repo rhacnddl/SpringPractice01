@@ -10,6 +10,9 @@
 <title>Board List</title>
 </head>
 <body>
+<c:set var="division" value='${board["div"]}'></c:set>
+<sec:authentication property="principal" var="pr"/>
+
 <c:if test="${division == 100}">
 	<div align="left">
 		<h2>자유게시판</h2>

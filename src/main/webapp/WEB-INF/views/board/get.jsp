@@ -185,10 +185,27 @@ input:focus, textarea:focus{
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	
 	var bnoValue = ${board.bno};
+	
+	$(".btn-reply-r_reply").on("click", function(e){
+		
+		var rnoValue = ${r.rno};
+		var writerValue = ${r.writer};
+		
+		var str = "<form action='' method='post'>" +
+				  "<input type='hidden' name='r_rno' value='${rnoValue}'>" +
+				  "<input type='hidden' name='bno' value='${bnoValue}'>" +
+				  "<input type='text' name='content'>" +
+				  "<input type='text' name='writer' value='${writerValue}'>" +
+				  "</form>";
+				  
+		console.log(str);
+		
+	});
 	
 	
 });

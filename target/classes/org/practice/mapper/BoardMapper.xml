@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org//dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.practice.mapper.BoardMapper">
+
+<select id="getList" resultType="org.practice.domain.BoardVO">
+	<![CDATA[
+		SELECT B.TITLE, B.BNO, B.WRITER, B.REGDATE, B.HIT, B.DIV, COUNT(R.BNO) REPLY_CNT 
+		FROM BOARD B
+		LEFT OUTER JOIN REPLY R ON R.BNO = B.BNO
+		WHERE B.BNO > 0 AND DIV = #{div}
+		GROUP BY B.TITLE, B.BNO, B.WRITER, B.REGDATE, B.HIT, B.DIV
+		ORDER BY B.BNO DESC
+	]]>
+</select>
+
+<insert id="write">
+	INSERT INTO BOARD(BNO, TITLE, CONTENT, WRITER, DIV)
+	VALUES(BNO_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, #{div})
+</insert>
+
+<delete id="remove">
+	DELETE BOARD WHERE BNO = #{bno}
+</delete>
+
+<update id="update">
+	UPDATE BOARD SET
+	TITLE = #{title}, CONTENT = #{content}, UPDATEDATE = SYSDATE
+	WHERE BNO = #{bno} 
+</update>
+
+<update id="hit">
+	UPDATE BOARD SET HIT = HIT + 1 WHERE BNO = #{bno}
+</update>
+
+<resultMap type="org.practice.domain.BoardVO" id="boardMap">
+	<id property="bno" column="BNO"/>
+	<result property="bno" column="BNO"/>
+	<result property="title" column="TITLE"/>
+	<result property="content" column="CONTENT"/>
+	<result property="writer" column="WRITER"/>
+	<result property="regDate" column="REGDATE"/>
+	<result property="updateDate" column="UPDATEDATE"/>
+	<result property="div" column="DIV"/>
+	<result property="hit" column="HIT"/>
+	<collection column="fileList" property="fileList" resultMap="fileMap">
+	</collection>
+</resultMap>
+
+<resultMap type="org.practice.domain.FileVO" id="fileMap" >
+	<result property="fileName" column="FILENAME"/>
+	<result property="uuid" column="UUID"/>
+</resultMap>
+
+<select id="get" resultMap="boardMap">
+	SELECT B.BNO, TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE, DIV, HIT, FILENAME, UUID 
+	FROM BOARD B 
+	LEFT OUTER JOIN FILES F ON B.BNO = F.BNO 
+	WHERE B.BNO = #{bno}
+</select>
+
+
+<select id="exist" resultType="string">
+	SELECT WRITER FROM BOARD WHERE BNO = #{bno}
+</select>
+
+<update id="hit_minus">
+	UPDATE BOARD SET HIT = HIT - 1 WHERE BNO = #{bno}
+</update>
+
+</mapper>
