@@ -136,13 +136,14 @@ input:focus, textarea:focus{
 						<c:if test="${r.r_rno == null || r.r_rno == 0}">
 						<tr>
 							<th>${r.writer} </th>
-							<td> : <input type="text" value="${r.content}" readonly>  </td>
+							<td> : <input type="text" class="reply_content" value="${r.content}" readonly>  </td>
 							<td> / <fmt:formatDate value="${r.regDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 							<c:if test="${r.updateDate != null}">
 								<td> / <fmt:formatDate value="${r.updateDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 							</c:if>
 								
 								<td>
+								<input type="hidden" class="reply_rno" value="${r.rno}">
 								<button name="r_reply" class="btn-reply-r_reply">답글</button>
 								<c:if test="${r.writer == pr.username}">
 									<button name="modify" class="btn-reply-update">수정</button>
@@ -159,7 +160,7 @@ input:focus, textarea:focus{
 							<c:if test="${r_r.r_rno == r.rno}">
 								<tr>
 									<th>${r.writer} <- ${r_r.writer}</th>
-									<td> : <input type="text" value="${r_r.content}" readonly>  </td>
+									<td> : <input type="text" class="reply_content" value="${r_r.content}" readonly>  </td>
 									<td> / <fmt:formatDate value="${r_r.regDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 									<c:if test="${r.updateDate != null}">
 										<td> / <fmt:formatDate value="${r_r.updateDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
@@ -167,6 +168,7 @@ input:focus, textarea:focus{
 										
 									<td>
 									<c:if test="${r_r.writer == pr.username}">
+										<input type="hidden" class="reply_rno" value="${r_r.rno}">
 										<button name="modify" class="btn-reply-update">수정</button>
 										<button name="remove" class="btn-reply-remove">삭제</button>
 									</c:if>
@@ -190,24 +192,74 @@ input:focus, textarea:focus{
 $(document).ready(function(){
 	
 	var bnoValue = ${board.bno};
+	var r_reply = $(".btn-reply-r_reply");
+	var reply_update = $(".btn-reply-update");
 	
-	$(".btn-reply-r_reply").on("click", function(e){
+	//대댓글 작성버튼
+	r_reply.on("click", function(e){
 		
-		var rnoValue = ${r.rno};
-		var writerValue = ${r.writer};
-		
-		var str = "<form action='' method='post'>" +
-				  "<input type='hidden' name='r_rno' value='${rnoValue}'>" +
-				  "<input type='hidden' name='bno' value='${bnoValue}'>" +
-				  "<input type='text' name='content'>" +
-				  "<input type='text' name='writer' value='${writerValue}'>" +
-				  "</form>";
-				  
-		console.log(str);
-		
+		if($(this).html() == '답글') {
+			
+			$(this).html('취소');
+			
+			var index = r_reply.index(this);
+			var elements = r_reply.prevAll('input');
+			var rnoValue = elements[(elements.length - 1) - index].value;
+			var r_replyWriter = '${pr.username}';
+			
+			console.log("this reply's index : " + index);
+			console.log("this reply's RNO : " + rnoValue);
+			console.log("R_Reply writer : " + r_replyWriter);
+			
+			var str = "<div class='write_r_reply'><form action='/reply/write' method='post'>" +
+					  "<input type='hidden' name='r_rno' value='" + rnoValue + "'>" +
+					  "<input type='hidden' name='bno' value='" + bnoValue + "'>" +
+					  "<input type='hidden' name='writer' value='" + r_replyWriter + "'>" +
+					  "<input type='hidden' name='${_csrf.parameterName}' value='${_csrf.token}'>" +
+					  "<input type='text' name='content'>" +
+					  "<input type='submit' value='작성'>" +
+					  "</form></div>";
+					  
+			console.log(str);
+			$(".reply-list").append(str);
+		}
+		else {
+			$(this).html('답글');
+			$(".write_r_reply").remove();
+		}
 	});
 	
+	reply_update.on("click", function(e){
+		
+		$(this).html('작성');
+		$(this).attr('name', 'update');
+		
+		var index = reply_update.index(this);
+		var elements = $(this).closest('tr').find('.reply_content');
+		var rnoValue = $(this).closest('tr').find('.reply_rno');
+		
+		console.log("reply_update index : " + index);
+		console.log("Original Content: " + elements.val());
+		console.log("RNO : " + rnoValue.val());
+		
+		//elements.attr('readonly', false);
+		elements.removeAttr('readonly');
+
+	});
 	
+	$("button[name='update']").on("click", function(e) {
+		
+		var elements = $(this).closest('tr').find('.reply_content');
+		
+		$.ajax({
+			type: 'POST',
+			  url: '/reply/update',
+			  data: {bno:bnoValue, content:elements.val()},
+			  success: function(data){
+				  console.log("Success" + data);
+			  }
+		}); //$.ajax end
+	});
 });
 </script>
 
