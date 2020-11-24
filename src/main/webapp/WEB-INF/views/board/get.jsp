@@ -148,6 +148,8 @@ input:focus, textarea:focus{
 								<c:if test="${r.writer == pr.username}">
 									<button name="modify" class="btn-reply-update">수정</button>
 									<button name="remove" class="btn-reply-remove">삭제</button>
+									<input type="hidden" name="update" value="send">
+									<input type="hidden" name="originalContent" value="${r.content}">
 								</c:if>
 								</td>
 						</tr>
@@ -171,6 +173,8 @@ input:focus, textarea:focus{
 										<input type="hidden" class="reply_rno" value="${r_r.rno}">
 										<button name="modify" class="btn-reply-update">수정</button>
 										<button name="remove" class="btn-reply-remove">삭제</button>
+										<input type="hidden" name="update" value="send">
+										<input type="hidden" name="originalContent" value="${r_r.content}">
 									</c:if>
 									</td>
 								</tr>
@@ -192,10 +196,12 @@ input:focus, textarea:focus{
 $(document).ready(function(){
 	
 	var bnoValue = ${board.bno};
+	var csrfToken = '${_csrf.token}';
+	
 	var r_reply = $(".btn-reply-r_reply");
 	var reply_update = $(".btn-reply-update");
 	
-	//대댓글 작성버튼
+	/* 대댓글 작성버튼 Click */
 	r_reply.on("click", function(e){
 		
 		if($(this).html() == '답글') {
@@ -229,37 +235,97 @@ $(document).ready(function(){
 		}
 	});
 	
+	/* 댓글/대댓글 수정버튼 Click */
 	reply_update.on("click", function(e){
 		
-		$(this).html('작성');
-		$(this).attr('name', 'update');
+		var elements = $(this).closest('tr').find('.reply_content');
+		var rnoValue = $(this).closest('tr').find('.reply_rno');
+		var btn_update = $(this).closest('tr').find("input[name='update']");
+		var originalContent = $(this).closest('tr').find("input[name='originalContent']");
 		
-		var index = reply_update.index(this);
+		console.log("Original Content: " + originalContent.val());
+		console.log("RNO : " + rnoValue.val());
+		
+		if($(this).html() == '수정') {
+			
+			$(this).html('이전');
+			
+			//elements.attr('readonly', false);
+			elements.removeAttr('readonly');
+			btn_update.attr('type', 'submit');
+			
+		}
+		else {
+			
+			$(this).html('수정')
+
+			elements.attr('readonly', true);
+			elements.val(originalContent.val());
+			
+			btn_update.attr('type', 'hidden');
+		}
+	});
+	
+	/* 댓글/대댓글 수정버튼 -> send버튼 Click */
+	$("input[name='update']").on("click", function(e) {
+		
+		$(this).attr('type', 'hidden');
+			
 		var elements = $(this).closest('tr').find('.reply_content');
 		var rnoValue = $(this).closest('tr').find('.reply_rno');
 		
-		console.log("reply_update index : " + index);
-		console.log("Original Content: " + elements.val());
-		console.log("RNO : " + rnoValue.val());
-		
-		//elements.attr('readonly', false);
-		elements.removeAttr('readonly');
-
-	});
-	
-	$("button[name='update']").on("click", function(e) {
-		
-		var elements = $(this).closest('tr').find('.reply_content');
+		console.log("Reply Content : " + elements.val());
+		console.log("RNO : " + rnoValue.val() + " BNO : " + bnoValue);
 		
 		$.ajax({
 			type: 'POST',
 			  url: '/reply/update',
-			  data: {bno:bnoValue, content:elements.val()},
+			  data: {bno:bnoValue,
+				  	 content:elements.val(),
+				  	 rno:rnoValue.val(),
+				  	 _csrf:csrfToken},
 			  success: function(data){
-				  console.log("Success" + data);
+				  
+				  console.log("Success");
+			  },
+			  error: function(jqXHR, status, error){
+				  
+				  console.log("jqXHR : " + jqXHR);
+				  console.log("Error : " + error);
+				  alert(status);
+			  },
+			  complete:function(){
+				  reply_update.html('수정');
+				  elements.attr('readonly', true);
 			  }
 		}); //$.ajax end
+		
 	});
+	
+	/* 댓글 삭제버튼 Click */
+	$(".btn-reply-remove").bind("click", function(e){
+		
+		var parent_tr = $(this).closest('tr');
+		var rnoValue = $(this).closest('tr').find(".reply_rno");
+		console.log("RNO : " + rnoValue.val());
+		
+		$.ajax({
+			url : '/reply/remove',
+			method : 'POST',
+			data : {rno:rnoValue.val(),
+					_csrf:csrfToken},
+			success : function(data){
+				parent_tr.remove();
+				alert("RNO : " + rnoValue.val() + " 댓글이 삭제되었습니다.");
+			},
+			error : function(jqXHR, status, error){
+				alert("Error: " + error);
+				console.log(status);
+			}
+		}); //$.ajax end
+		
+	});
+	
 });
 </script>
 

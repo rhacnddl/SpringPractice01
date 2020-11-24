@@ -70,7 +70,7 @@ public class BoardController {
 		
 		log.info("=============== Board Controller ====================");
 		model.addAttribute("list", service.getList(div));
-		model.addAttribute("division", div);
+		model.addAttribute("divis", div);
 	}
 	
 	@GetMapping("/write")

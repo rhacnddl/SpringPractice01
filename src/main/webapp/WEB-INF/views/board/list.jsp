@@ -10,15 +10,15 @@
 <title>Board List</title>
 </head>
 <body>
-<c:set var="division" value='${board["div"]}'></c:set>
+
 <sec:authentication property="principal" var="pr"/>
 
-<c:if test="${division == 100}">
+<c:if test="${divis == 100}">
 	<div align="left">
 		<h2>자유게시판</h2>
 	</div>
 </c:if>
-<c:if test="${division == 101}">
+<c:if test="${divis == 101}">
 	<div align="left">
 		<h2>출석게시판</h2>
 	</div>
@@ -34,7 +34,7 @@
 		</div>
 		
 		<div class="button-default" align="center">
-			<a href="/board/write?div=${division}">게시글 작성</a>
+			<a href="/board/write?div=${divis}">게시글 작성</a>
 		</div>
 		<div>
 		<table border="1" width="700" height = "130" align="center" style="border-collapse: collapse;">
