@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org//dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.practice.mapper.MapMapper">
+
+<insert id="insert">
+	INSERT INTO MAP(BNO, LAT, LNG) VALUES(BNO_SEQ.CURRVAL, #{lat}, #{lng})
+</insert>
+
+<select id="show" resultType="org.practice.domain.MapVO">
+	SELECT * FROM MAP WHERE BNO = #{bno}
+</select>
+
+<delete id="remove">
+	DELETE MAP WHERE BNO = #{bno}
+</delete>
+
+</mapper>

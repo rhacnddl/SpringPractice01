@@ -20,10 +20,12 @@
 <body>
 
 <sec:authentication var="writer" property='principal.username'/>
-
+<h1 align="center">Board Write</h1>
+<div align="center">
+	<a href="/board/list?div=${division}">목록</a>
+</div>
 <div class="form-board-write" align="center">
 	<form action="/board/write" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		<div class="form-default">
 			<label>Category</label>
 			<select name="div">
@@ -50,11 +52,15 @@
 			<input type="file" id="uploadFile" name="uploadFile" multiple="multiple">
 			<button name="btn-delete">X</button>
 		</div>
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+		<input type="hidden" name="lat">
+		<input type="hidden" name="lng">
 		<button>Submit</button>
 	</form>
 	
 	
 	<div class="map_wrap">
+		<button id="btn-map">지도</button>
     	<div id="map" style="width:500px;height:100%;position:relative;overflow:hidden;"></div>
     	<div class="hAddr">
         	<span class="title">지도중심기준 행정동 주소정보</span>
@@ -70,6 +76,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+$("#btn-map").on("click", function(){
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
@@ -87,6 +94,7 @@ var marker = new kakao.maps.Marker(), // 클릭한 위치를 표시할 마커입
 
 // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
 searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+
 
 // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
@@ -107,6 +115,13 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
             // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
             infowindow.setContent(content);
             infowindow.open(map, marker);
+            
+            var latlng = mouseEvent.latLng;
+            var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+            message += '경도는 ' + latlng.getLng() + ' 입니다';
+            $("input[name='lat']").val(latlng.getLat());
+            $("input[name='lng']").val(latlng.getLng());
+            alert(message);
         }   
     });
 });
@@ -140,6 +155,7 @@ function displayCenterInfo(result, status) {
         }
     }    
 }
+});
 </script>
 <!-- 
 <script>

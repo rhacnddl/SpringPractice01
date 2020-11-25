@@ -20,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.practice.domain.BoardVO;
 import org.practice.domain.FileVO;
+import org.practice.domain.MapVO;
+import org.practice.domain.ReplyVO;
 import org.practice.mapper.UploadMapper;
 import org.practice.service.BoardService;
+import org.practice.service.MapService;
 import org.practice.service.ReplyService;
 import org.practice.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +67,9 @@ public class BoardController {
 	@Setter(onMethod_ = @Autowired)
 	private UploadService upload_service;
 	
+	@Setter(onMethod_ = @Autowired)
+	private MapService map_service;
+	
 	
 	@GetMapping("/list")
 	public void list(int div, Model model) {
@@ -80,12 +86,15 @@ public class BoardController {
 		model.addAttribute("division", div);
 	}
 	@PostMapping("/write")
-	public String write(BoardVO board, @RequestParam(name="uploadFile") MultipartFile[] uploadFile, 
+	@Transactional
+	public String write(BoardVO board, MapVO map, @RequestParam(name="uploadFile") MultipartFile[] uploadFile, 
 			RedirectAttributes rttr) {
 		
 		log.info("================================");
 		log.info("@Controller - BoardVO : " + board);
 		service.write(board);
+		if(!map.getLat().equals("") || map.getLat() != null)
+			map_service.insert(map);
 		
 		if(uploadFile[0].getSize() != 0) {
 			fileUpload(uploadFile, 0);
@@ -107,8 +116,8 @@ public class BoardController {
 		
 		service.hit(bno);
 		model.addAttribute("board", service.get(bno));
-		//model.addAttribute("file", upload_service.getFileList(bno));
 		model.addAttribute("reply", reply_service.list(bno));
+		model.addAttribute("map", map_service.show(bno));
 	}
 	
 	@GetMapping({"/update"})
@@ -143,11 +152,17 @@ public class BoardController {
 	}
 	
 	@GetMapping("/remove")
+	@Transactional
 	public String remove(int bno, RedirectAttributes rttr) {
 		
 		int div = service.get(bno).getDiv();
 		
 		if(service.remove(bno)) {
+			map_service.remove(bno);
+			
+			List<ReplyVO> replies = reply_service.list(bno);
+			replies.forEach(reply -> reply_service.remove(reply.getBno()));
+			
 			List<FileVO> list = upload_service.getFileList(bno);
 			log.info("Remove Board's Files : " + list);
 			list.forEach(vo -> upload_service.deleteFile(vo.getUuid()));

@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Board Get</title>
+
 <style type="text/css">
 .board-part-table{
 	border:1px solid;
@@ -63,7 +64,12 @@ input:focus, textarea:focus{
 			</tr>
 			<tr class="board-part">
 				<th class="board-part">Content</th>
-				<td class="board-part"><textarea rows="4" cols="70" style="resize:none;height:99%;" class="board-part-input" name="content" readonly="readonly">${board.content}</textarea></td>
+				<td class="board-part">
+					<textarea rows="4" cols="70" style="resize:none;height:99%;" class="board-part-input" name="content" readonly="readonly">${board.content}</textarea>
+					<c:if test="${not empty map}">
+						<div id="staticMap" style="width:600px;height:350px;"></div> 
+					</c:if>
+				</td>
 			</tr>
 			<tr class="board-part">
 				<th class="board-part">Hit</th>
@@ -191,6 +197,32 @@ input:focus, textarea:focus{
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=73c4181cf7d5a318ee22ad876d96dcdb&libraries=services"></script>
+<script>
+//var lat = 37.652726262357035;
+//var lng = 127.04659752349303;
+var lat = ${map.lat};
+var lng = ${map.lng};
+
+// 이미지 지도에서 마커가 표시될 위치입니다 
+var markerPosition  = new kakao.maps.LatLng(lat, lng); 
+
+// 이미지 지도에 표시할 마커입니다
+// 이미지 지도에 표시할 마커는 Object 형태입니다
+var marker = {
+    position: markerPosition
+};
+
+var staticMapContainer  = document.getElementById('staticMap'), // 이미지 지도를 표시할 div  
+    staticMapOption = { 
+        center: new kakao.maps.LatLng(lat, lng), // 이미지 지도의 중심좌표
+        level: 3, // 이미지 지도의 확대 레벨
+        marker: marker // 이미지 지도에 표시할 마커 
+    };    
+
+// 이미지 지도를 생성합니다
+var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){
