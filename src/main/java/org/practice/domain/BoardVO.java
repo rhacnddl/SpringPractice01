@@ -18,5 +18,5 @@ public class BoardVO {
 	private Date updateDate;
 	
 	private List<FileVO> fileList;
-	private int reply_Cnt;
+	private int cnt;
 }

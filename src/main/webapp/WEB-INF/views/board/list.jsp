@@ -23,12 +23,19 @@
 		<h2>출석게시판</h2>
 	</div>
 </c:if>
+<c:if test="${divis == 102}">
+	<div align="left">
+		<h2>맛집게시판</h2>
+	</div>
+</c:if>
+
 		<div align="center">
-			<form action="viewList">
-				<select>
+			<form action="/board/list?div=${divis}">
+				<select name="category">
 					<option selected>제목</option>
 				</select>
-				<input type="text" name="query">
+				<input type="hidden" name="div" value="${divis}">
+				<input type="text" name="keyword">
 				<input type="submit" value="검색"/>
 			</form>
 		</div>
@@ -52,8 +59,8 @@
 			    <td align="center">${list.bno}</td>
 			<!-- 제목 옆 댓글 수 -->
 		    	<td align="center"><a href="/board/get?bno=${list.bno}"> ${list.title}</a>
-		    		<c:if test="${list.reply_Cnt > 0}">
-		    		<b style="color: red;">[${list.reply_Cnt}]</b>
+		    		<c:if test="${list.cnt > 0}">
+		    		<b style="color: red;">[${list.cnt}]</b>
 		    		</c:if>
 		    	</td>
 		    	<td align="center">${list.writer}</td>
@@ -62,7 +69,27 @@
 				</tr><!-- 첫번째 줄 끝 -->
 			</c:forEach>
 	    </table>
+	     <!-- Pager 부분 -->
+	    <div class="pager-first">
+	    	<ul class="pagination">
+	    		<!-- [이전] -->
+	    		<c:if test="${pageMaker.prev}">
+	    			<li class="paginate_btn_prev"><a href="#">Prev</a></li>
+	    		</c:if>
+	    		
+	    		<c:forEach var="n" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+	    			<li class="paginate_btn"><a href="/board/list?div=${divis}&page=${n}">${n}</a></li>
+	    		</c:forEach>
+	    		
+	    		<!-- [다음] -->
+	    		<c:if test="${pageMaker.next}">
+	    			<li class="paginate_btn_prev"><a href="#">Next</a></li>
+	    		</c:if>
+	    	</ul>
+	    </div>
+	    <!-- Pager 부분 -->
     </div>
+   
    
     <div align="center">
     	<a href="/home">이전페이지</a>

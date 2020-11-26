@@ -3,9 +3,11 @@ package org.practice.service;
 import java.util.List;
 
 import org.practice.domain.ReplyVO;
+import org.practice.mapper.BoardMapper;
 import org.practice.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -17,6 +19,9 @@ public class ReplyServiceImpl implements ReplyService{
 	@Setter(onMethod_ = @Autowired)
 	private ReplyMapper mapper;
 	
+	@Setter(onMethod_ = @Autowired)
+	private BoardMapper board_mapper;
+	
 	
 	@Override
 	public void write(ReplyVO reply) {
@@ -26,6 +31,7 @@ public class ReplyServiceImpl implements ReplyService{
 		log.info("======================");
 		
 		mapper.write(reply);
+		board_mapper.updateCnt(reply.getBno(), 1);
 	}
 
 	@Override
@@ -36,6 +42,7 @@ public class ReplyServiceImpl implements ReplyService{
 		log.info("======================");
 		
 		mapper.write_r(reply);
+		board_mapper.updateCnt(reply.getBno(), 1);
 	}
 
 	@Override
@@ -54,6 +61,10 @@ public class ReplyServiceImpl implements ReplyService{
 		log.info("======================");
 		log.info("@Service, Reply Remove RNO : " + rno);
 		log.info("======================");
+		
+		ReplyVO reply = mapper.get(rno);
+		
+		board_mapper.updateCnt(reply.getBno(), -1);
 		
 		return mapper.remove(rno) == 1;
 	}

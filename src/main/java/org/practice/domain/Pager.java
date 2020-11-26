@@ -11,20 +11,27 @@ import lombok.ToString;
 public class Pager {
 
 	private int page;
+	private int amount;
 	
 	private String type;
 	private String key;
 	
+	
 	public Pager() {
-		this.page = 1;
+		this(1,10, "", "");
 	}
+	
+	public Pager(int page, int amount) {
+		this(page, amount, "", "");
+	}
+	
 	public Pager(String type, String key) {
-		this.page = 1;
-		this.type = type;
-		this.key = key;
+		this(1, 10, type, key);
 	}
-	public Pager(int page, String type, String key) {
+	
+	public Pager(int page, int amount, String type, String key) {
 		this.page = page;
+		this.amount = amount;
 		this.key = key;
 		this.type = type;
 	}

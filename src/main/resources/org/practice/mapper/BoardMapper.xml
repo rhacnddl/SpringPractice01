@@ -4,14 +4,51 @@
 	"http://mybatis.org//dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.practice.mapper.BoardMapper">
 
+<select id="exist" resultType="string">
+	SELECT WRITER FROM BOARD WHERE BNO = #{bno}
+</select>
+
+<select id="getTotal" resultType="Integer">
+	SELECT COUNT(BNO) FROM BOARD WHERE DIV = #{div}
+</select>
+
+<select id="getListWithPaging" resultType="org.practice.domain.BoardVO">
+	<![CDATA[
+		SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT
+		FROM (
+    		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ BOARD.*, ROWNUM RN FROM BOARD
+    		WHERE DIV = #{div} AND 
+    		ROWNUM <= #{p.page} * #{p.amount} 
+    	) B
+		WHERE RN > (#{p.page} - 1) * #{p.amount};
+	]]>
+</select>
+
 <select id="getList" resultType="org.practice.domain.BoardVO">
 	<![CDATA[
-		SELECT B.TITLE, B.BNO, B.WRITER, B.REGDATE, B.HIT, B.DIV, COUNT(R.BNO) REPLY_CNT 
-		FROM BOARD B
-		LEFT OUTER JOIN REPLY R ON R.BNO = B.BNO
-		WHERE B.BNO > 0 AND DIV = #{div}
-		GROUP BY B.TITLE, B.BNO, B.WRITER, B.REGDATE, B.HIT, B.DIV
-		ORDER BY B.BNO DESC
+		SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT
+		FROM (
+    		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ BOARD.*, ROWNUM RN FROM BOARD
+    		WHERE DIV = #{div} AND 
+    		ROWNUM <= #{page} * #{amount} 
+    	) B
+		WHERE RN > (#{page} - 1) * #{amount};
+	]]>
+</select>
+
+<select id="next_bno" resultType="string">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT BNO FROM BOARD WHERE DIV = #{div} AND BNO > #{bno} ORDER BY BNO
+	) WHERE ROWNUM <= 1
+	]]>
+</select>
+
+<select id="prev_bno" resultType="string">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT BNO FROM BOARD WHERE DIV = #{div} AND BNO < #{bno} ORDER BY BNO DESC
+	) WHERE ROWNUM <= 1
 	]]>
 </select>
 
@@ -23,16 +60,6 @@
 <delete id="remove">
 	DELETE BOARD WHERE BNO = #{bno}
 </delete>
-
-<update id="update">
-	UPDATE BOARD SET
-	TITLE = #{title}, CONTENT = #{content}, UPDATEDATE = SYSDATE
-	WHERE BNO = #{bno} 
-</update>
-
-<update id="hit">
-	UPDATE BOARD SET HIT = HIT + 1 WHERE BNO = #{bno}
-</update>
 
 <resultMap type="org.practice.domain.BoardVO" id="boardMap">
 	<id property="bno" column="BNO"/>
@@ -61,12 +88,22 @@
 </select>
 
 
-<select id="exist" resultType="string">
-	SELECT WRITER FROM BOARD WHERE BNO = #{bno}
-</select>
+
+<update id="update">
+	UPDATE BOARD SET
+	TITLE = #{title}, CONTENT = #{content}, UPDATEDATE = SYSDATE
+	WHERE BNO = #{bno} 
+</update>
+
+<update id="hit">
+	UPDATE BOARD SET HIT = HIT + 1 WHERE BNO = #{bno}
+</update>
 
 <update id="hit_minus">
 	UPDATE BOARD SET HIT = HIT - 1 WHERE BNO = #{bno}
 </update>
 
+<update id="updateCnt">
+	UPDATE BOARD SET CNT = CNT + #{amount} WHERE BNO = #{bno}
+</update>
 </mapper>

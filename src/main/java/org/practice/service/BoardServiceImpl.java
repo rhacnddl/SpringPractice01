@@ -3,6 +3,7 @@ package org.practice.service;
 import java.util.List;
 
 import org.practice.domain.BoardVO;
+import org.practice.domain.Pager;
 import org.practice.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,24 @@ public class BoardServiceImpl implements BoardService{
 	
 	
 	@Override
-	public List<BoardVO> getList(int div) {
+	public List<BoardVO> getList(int div, Pager p) {
 		
-		if(div == 100)
-			log.info("자유게시판, Div = 100");
-		else
-			log.info("인사게시판, Div = 101");
+		log.info("=============================");
+		log.info("@Service, BOARD SERVICE GET LIST with Pager: " + p);
+		switch(div) {
+		case 100:
+			log.info("# 자유게시판");
+			break;
+		case 101:
+			log.info("# 출석게시판");
+			break;
+		case 102:
+			log.info("# 맛집게시판");
+			break;
+		}
+		log.info("=============================");
 		
-		return mapper.getList(div);
+		return mapper.getListWithPaging(div, p);
 	}
 
 	@Override
@@ -84,6 +95,22 @@ public class BoardServiceImpl implements BoardService{
 		
 		log.info("Board " + bno + " Hit - 1");
 		mapper.hit_minus(bno);
+	}
+	@Override
+	public int getTotal(int div) {
+		
+		return mapper.getTotal(div);
+	}
+	@Override
+	public String getNextBno(int bno, int div) {
+		// TODO Auto-generated method stub
+		return mapper.next_bno(bno, div);
+		
+	}
+	@Override
+	public String getPrevBno(int bno, int div) {
+		// TODO Auto-generated method stub
+		return mapper.prev_bno(bno, div);
 	}
 	
 }

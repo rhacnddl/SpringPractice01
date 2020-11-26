@@ -41,6 +41,14 @@ input:focus, textarea:focus{
 <div class="table-default" align="center">
 
 	<a href="/board/list?div=${division}">목록</a>
+	<div align="center">
+		<c:if test="${not empty next}">
+			<a href="/board/get?bno=${next}">다음 글</a>
+		</c:if>
+		<c:if test="${not empty prev}">
+			<a href="/board/get?bno=${prev}">이전 글</a>
+		</c:if>
+	</div>
 	<table class="board-part-table">
 		<tbody>
 			<tr class="board-part">
@@ -51,6 +59,9 @@ input:focus, textarea:focus{
 				</c:if>
 				<c:if test="${division eq 101}">
 					<input type="text" name="div" value="인사게시판" readonly="readonly" class="board-part-input">
+				</c:if>
+				<c:if test="${division eq 102}">
+					<input type="text" name="div" value="맛집게시판" readonly="readonly" class="board-part-input">
 				</c:if>
 				</td>
 			</tr>
@@ -201,27 +212,28 @@ input:focus, textarea:focus{
 <script>
 //var lat = 37.652726262357035;
 //var lng = 127.04659752349303;
-var lat = ${map.lat};
-var lng = ${map.lng};
 
-// 이미지 지도에서 마커가 표시될 위치입니다 
-var markerPosition  = new kakao.maps.LatLng(lat, lng); 
-
-// 이미지 지도에 표시할 마커입니다
-// 이미지 지도에 표시할 마커는 Object 형태입니다
-var marker = {
-    position: markerPosition
-};
-
-var staticMapContainer  = document.getElementById('staticMap'), // 이미지 지도를 표시할 div  
-    staticMapOption = { 
-        center: new kakao.maps.LatLng(lat, lng), // 이미지 지도의 중심좌표
-        level: 3, // 이미지 지도의 확대 레벨
-        marker: marker // 이미지 지도에 표시할 마커 
-    };    
-
-// 이미지 지도를 생성합니다
-var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+	var lat = ${map.lat};
+	var lng = ${map.lng};
+	
+	// 이미지 지도에서 마커가 표시될 위치입니다 
+	var markerPosition  = new kakao.maps.LatLng(lat, lng); 
+	
+	// 이미지 지도에 표시할 마커입니다
+	// 이미지 지도에 표시할 마커는 Object 형태입니다
+	var marker = {
+	    position: markerPosition
+	};
+	
+	var staticMapContainer  = document.getElementById('staticMap'), // 이미지 지도를 표시할 div  
+	    staticMapOption = { 
+	        center: new kakao.maps.LatLng(lat, lng), // 이미지 지도의 중심좌표
+	        level: 3, // 이미지 지도의 확대 레벨
+	        marker: marker // 이미지 지도에 표시할 마커 
+	    };    
+	
+	// 이미지 지도를 생성합니다
+	var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
 </script>
 
 <script type="text/javascript">

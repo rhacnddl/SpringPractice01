@@ -28,10 +28,14 @@
 		<li><a href="/admin/grant">멤버 권한 관리</a></li>
 		</sec:authorize>
 		<li><a href="/member/info?userid=${pr.username}">개인정보</a></li>
-		<li><a href="/board/list?div=100">자유게시판</a></li>
-		<li><a href="/board/list?div=101">출석게시판</a></li>
+		<li><a href="/board/list?div=100&page=1&amount=10">자유게시판</a></li>
+		<li><a href="/board/list?div=101&page=1&amount=10">출석게시판</a></li>
+		<li><a href="/board/list?div=102&page=1&amount=10">맛집게시판</a></li>
 	</ul>
 </div>
+
+<div id="map" style="width:100%;height:350px;"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </body>
 </html>

@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.practice.domain.BoardVO;
 import org.practice.domain.FileVO;
 import org.practice.domain.MapVO;
+import org.practice.domain.PageDTO;
+import org.practice.domain.Pager;
 import org.practice.domain.ReplyVO;
 import org.practice.mapper.UploadMapper;
 import org.practice.service.BoardService;
@@ -55,8 +57,6 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping(value = "/board")
 @PreAuthorize("isAuthenticated()")
 public class BoardController {
-
-	/* */
 	
 	@Setter(onMethod_ = @Autowired)
 	private BoardService service;
@@ -70,13 +70,23 @@ public class BoardController {
 	@Setter(onMethod_ = @Autowired)
 	private MapService map_service;
 	
-	
+	/*
+	 @RequestParam(value="type", required = false)String type, 
+			@RequestParam(value="keyword", required = false)String keyword, 
+	 * */
 	@GetMapping("/list")
-	public void list(int div, Model model) {
+	public void list(@RequestParam(value="div")int div, @RequestParam(value="page")int page, 
+			@RequestParam(value="amount")int amount, Model model) {
 		
-		log.info("=============== Board Controller ====================");
-		model.addAttribute("list", service.getList(div));
+		Pager p = new Pager(page, amount);
+		
+		log.info("=============================");
+		log.info("@Controller, BOARD Controller -> Get Board List with Paging: " + p + " Div = " + div);
+		log.info("=============================");
+		
+		model.addAttribute("list", service.getList(div, p));
 		model.addAttribute("divis", div);
+		model.addAttribute("pageMaker", new PageDTO(p, service.getTotal(div)));
 	}
 	
 	@GetMapping("/write")
@@ -114,10 +124,19 @@ public class BoardController {
 		log.info("@Controller, Board Get Bno : " + bno);
 		log.info("===============================");
 		
+		BoardVO board = service.get(bno);
+		
 		service.hit(bno);
-		model.addAttribute("board", service.get(bno));
+		model.addAttribute("board", board);
 		model.addAttribute("reply", reply_service.list(bno));
 		model.addAttribute("map", map_service.show(bno));
+		
+		String next = service.getNextBno(bno, board.getDiv());
+		String prev = service.getPrevBno(bno, board.getDiv());
+		if(next != null)
+			model.addAttribute("next", next);
+		if(prev != null)
+			model.addAttribute("prev", prev);
 	}
 	
 	@GetMapping({"/update"})
