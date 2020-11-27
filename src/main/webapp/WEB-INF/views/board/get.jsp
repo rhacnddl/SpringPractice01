@@ -40,7 +40,12 @@ input:focus, textarea:focus{
 <!-- Board 정보 Part -->
 <div class="table-default" align="center">
 
-	<a href="/board/list?div=${division}">목록</a>
+	<form action="/board/list" method="get" id="actionForm">
+		<input type="hidden" value="${division}" name="div">
+		<input type="hidden" value="${p.page}" name="page">
+		<input type="hidden" value="${p.amount}" name="amount">
+	</form>
+	<a class="go-to-list" href="#">목록</a>
 	<div align="center">
 		<c:if test="${not empty next}">
 			<a href="/board/get?bno=${next}">다음 글</a>
@@ -114,21 +119,21 @@ input:focus, textarea:focus{
 </div>
 <!-- File Part -->
 <div align="center">
-	<a href="/board/list?div=${division}">목록</a>
-	<form class="form-default" action="/board/update">
-		<input type="hidden" name="bno" value="${board.bno}">
-		<c:if test="${pr.username eq board.writer}">
-			<button class="button-update">수정하기</button>
-		</c:if>
-	</form>
-	<form class="form-default" action="/board/remove">
-		<input type="hidden" value="${board.bno}" name="bno">
-		<c:if test="${pr.username eq board.writer}">
-			<button class="button-remove">삭제하기</button>
-		</c:if>	
-	</form>
+	<a class="go-to-list" href="#">목록</a>
+	<div>
+	<c:if test="${pr.username eq board.writer}">
+		<button class="btn-update">수정하기</button>
+	</c:if>
+	</div>
+	<div>
+	<c:if test="${pr.username eq board.writer}">
+		<button class="btn-remove">삭제하기</button>
+	</c:if>	
+	</div>
 </div>
-
+<script type="text/javascript">
+	
+</script>
 <!-- 이하 댓글창 -->
 <div class="reply-first-frame" align="center">
 	<label>Reply</label>
@@ -370,6 +375,34 @@ $(document).ready(function(){
 		
 	});
 	
+	var actionForm = $("#actionForm");
+	//목록 눌렀을 때
+	$(".go-to-list").on("click", function(e){
+		
+		e.preventDefault();
+		actionForm.submit();
+	});
+	//수정하기 눌렀을 떄
+	$(".btn-update").on("click", function(e){
+		
+		e.preventDefault();
+		
+		var str = "<input type='hidden' name='bno' value='${board.bno}'>";
+		actionForm.append(str);
+		actionForm.attr('action', '/board/update');
+		actionForm.submit();
+	});
+	//삭제하기 눌렀을 때
+	$(".btn-remove").on("click", function(e){
+		
+		e.preventDefault();
+		if(confirm('삭제하시겠습니까?') == true) {
+			var str = '<input type="hidden" value="${board.bno}" name="bno">';
+			actionForm.append(str);
+			actionForm.attr('action', '/board/remove');
+			actionForm.submit();
+		}
+	});
 });
 </script>
 

@@ -14,16 +14,17 @@
 
 <select id="getListWithPaging" resultType="org.practice.domain.BoardVO">
 	<![CDATA[
-		SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT
+		SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT 
 		FROM (
-    		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ BOARD.*, ROWNUM RN FROM BOARD
+    		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ BOARD.*, ROWNUM RN FROM BOARD 
     		WHERE DIV = #{div} AND 
-    		ROWNUM <= #{p.page} * #{p.amount} 
-    	) B
-		WHERE RN > (#{p.page} - 1) * #{p.amount};
+    		ROWNUM <= (#{p.page} * #{p.amount}) 
+    	) B 
+		WHERE RN > (#{p.page} - 1) * #{p.amount}
 	]]>
 </select>
 
+<!-- 
 <select id="getList" resultType="org.practice.domain.BoardVO">
 	<![CDATA[
 		SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT
@@ -32,9 +33,10 @@
     		WHERE DIV = #{div} AND 
     		ROWNUM <= #{page} * #{amount} 
     	) B
-		WHERE RN > (#{page} - 1) * #{amount};
+		WHERE RN > (#{page} - 1) * #{amount}
 	]]>
 </select>
+ -->
 
 <select id="next_bno" resultType="string">
 	<![CDATA[

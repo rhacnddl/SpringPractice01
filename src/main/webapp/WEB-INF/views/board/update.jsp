@@ -36,8 +36,15 @@ input:focus, textarea:focus{
 </div>
 
 <div class="table-default" align="center">
-	<a href="/board/get?bno=${bno}">이전</a>
-	<form action="/board/update" method="post" enctype="multipart/form-data">
+
+	<form action="/board/list" method="get" id="actionForm">
+		<input type="hidden" value="${division}" name="div">
+		<input type="hidden" value="${p.page}" name="page">
+		<input type="hidden" value="${p.amount}" name="amount">
+	</form>
+	
+	<a class="go-to-list" href="#">이전</a>
+	<form id="boardForm" action="/board/update" method="post" enctype="multipart/form-data">
 		<table class="board-part-table">
 			<tbody>
 				<tr class="board-part">
@@ -87,7 +94,7 @@ input:focus, textarea:focus{
 		</table>
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		<input type="hidden" name="div" value="${division}">
-		<input type="submit" value="수정하기">
+		<button class="btn-submit">수정하기</button>
 	</form>
 </div>
 <div align="center">
@@ -107,7 +114,7 @@ input:focus, textarea:focus{
 	
 </div>
 <div align="center">
-	<a href="/board/get?bno=${bno}">이전</a>
+	<a class="go-to-list" href="#">이전</a>
 </div>
 
 <!-- jQuery -->
@@ -116,8 +123,26 @@ input:focus, textarea:focus{
 $(document).ready(function(){
 	
 	var bnoValue = ${board.bno};
-	var arr = ${board.fileList};
 	
+	var boardForm = $("#boardForm");
+	var actionForm = $("#actionForm");
+	//목록 눌렀을 때
+	$(".go-to-list").on("click", function(e){
+		
+		e.preventDefault();
+		actionForm.submit();
+	});
+	
+	//수정하기 눌렀을 때
+	$(".btn-submit").on("click", function(e){
+		
+		e.preventDefault();
+		var str = '<input type="hidden" value="${p.page}" name="page">' + 
+				  '<input type="hidden" value="${p.amount}" name="amount">';
+				  
+		boardForm.append(str);
+		boardForm.submit();
+	});
 	
 });
 </script>

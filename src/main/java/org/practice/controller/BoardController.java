@@ -41,6 +41,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,20 +74,26 @@ public class BoardController {
 	/*
 	 @RequestParam(value="type", required = false)String type, 
 			@RequestParam(value="keyword", required = false)String keyword, 
-	 * */
+			@RequestParam(value="page", required = false)int page, 
+			@RequestParam(value="amount", required = false)int amount
+			
+			Pager p;
+		
+		if(Integer.toString(page) != null && Integer.toString(amount) != null)
+			p = new Pager(page, amount);
+		else
+			p = new Pager();
+	 */
 	@GetMapping("/list")
-	public void list(@RequestParam(value="div")int div, @RequestParam(value="page")int page, 
-			@RequestParam(value="amount")int amount, Model model) {
-		
-		Pager p = new Pager(page, amount);
-		
+	public void list(@RequestParam(value="div")int div, Pager p, Model model) {
+	
 		log.info("=============================");
 		log.info("@Controller, BOARD Controller -> Get Board List with Paging: " + p + " Div = " + div);
 		log.info("=============================");
 		
 		model.addAttribute("list", service.getList(div, p));
-		model.addAttribute("divis", div);
 		model.addAttribute("pageMaker", new PageDTO(p, service.getTotal(div)));
+		model.addAttribute("divis", div);
 	}
 	
 	@GetMapping("/write")
@@ -118,7 +125,7 @@ public class BoardController {
 	
 	@GetMapping({"/get"})
 	@Transactional
-	public void get(int bno, Model model) {
+	public void get(@RequestParam("bno")int bno, @ModelAttribute("p") Pager p, Model model) {
 		
 		log.info("===============================");
 		log.info("@Controller, Board Get Bno : " + bno);
@@ -130,9 +137,10 @@ public class BoardController {
 		model.addAttribute("board", board);
 		model.addAttribute("reply", reply_service.list(bno));
 		model.addAttribute("map", map_service.show(bno));
+		//model.addAttribute("p", p);
 		
-		String next = service.getNextBno(bno, board.getDiv());
-		String prev = service.getPrevBno(bno, board.getDiv());
+		String next = service.getNextBno(bno, board.getDiv()); //게시글의 다음 글
+		String prev = service.getPrevBno(bno, board.getDiv()); //게시글의 이전 글
 		if(next != null)
 			model.addAttribute("next", next);
 		if(prev != null)
@@ -140,7 +148,7 @@ public class BoardController {
 	}
 	
 	@GetMapping({"/update"})
-	public void update(int bno, Model model) {
+	public void update(int bno, @ModelAttribute("p") Pager p, Model model) {
 		
 		log.info("===============================");
 		log.info("@Controller, Board Update Bno : " + bno);
@@ -150,47 +158,57 @@ public class BoardController {
 		//model.addAttribute("file", upload_service.getFileList(bno));
 	}
 	@PostMapping("/update")
-	public String update(BoardVO board, @RequestParam("uploadFile") MultipartFile[] uploadFile, RedirectAttributes rttr) {
+	public String update(BoardVO board, @ModelAttribute("p") Pager p, @RequestParam("uploadFile") MultipartFile[] uploadFile, RedirectAttributes rttr) {
+		log.info("=============================");
+		log.info("# Pager : " + p);
 		
 		if(service.update(board)) {
 			
 			if(uploadFile[0].getSize() != 0) {
 				fileUpload(uploadFile, board.getBno());
 			}
-			
-			rttr.addAttribute("msg", "Update Success");
 			log.info("Update Board : " + board);
 		}
 		else {
-			rttr.addAttribute("msg", "Update Fail");
 			log.info("Can't Update Board : " + board);
 		}
-		//file 수정사항 있으면 변경해야함 !!!!!!!!!!!
+		rttr.addAttribute("div", board.getDiv());
+		rttr.addAttribute("page", p.getPage());
+		rttr.addAttribute("amount", p.getAmount());
 		
-		return "redirect:/board/list?div=" + board.getDiv();
+		return "redirect:/board/list";
 	}
 	
 	@GetMapping("/remove")
 	@Transactional
-	public String remove(int bno, RedirectAttributes rttr) {
-		
-		int div = service.get(bno).getDiv();
+	public String remove(@RequestParam("bno")int bno, @ModelAttribute("p") Pager p, RedirectAttributes rttr) {
+				
+		rttr.addAttribute("div", service.get(bno).getDiv());
+		rttr.addAttribute("page", p.getPage());
+		rttr.addAttribute("amount", p.getAmount());
 		
 		if(service.remove(bno)) {
+			log.info("========================================");
+			log.info("@Board Controller, REMOVE BNO : " + bno);
+			log.info("========================================");
+
 			map_service.remove(bno);
 			
+			//해당 게시물에 있는 댓글들 삭제
 			List<ReplyVO> replies = reply_service.list(bno);
 			replies.forEach(reply -> reply_service.remove(reply.getBno()));
 			
+			//해당 게시물에 있는 파일들 삭제
 			List<FileVO> list = upload_service.getFileList(bno);
 			log.info("Remove Board's Files : " + list);
 			list.forEach(vo -> upload_service.deleteFile(vo.getUuid()));
-			log.info("Remove Board Bno : " + bno);
 		}
 		else
 			log.warn("Can't Remove Board Bno : " + bno);
 		
-		return "redirect:/board/list?div=" + div;
+
+		
+		return "redirect:/board/list";
 	}
 	
 	/*

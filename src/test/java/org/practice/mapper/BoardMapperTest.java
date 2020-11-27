@@ -21,22 +21,23 @@ public class BoardMapperTest {
 	@Setter(onMethod_ = @Autowired)
 	private BoardMapper mapper;
 	
-	/*
+	
 	@Test
 	public void writeTest() {
 		
 		BoardVO board = new BoardVO();
-		
-		board.setTitle("BOARD TEST2");
-		board.setContent("BOARD TEST2");
+		for(int i=0; i<50; i++) {
+		board.setTitle("여백의 미 " + i + "^^");
+		board.setContent("BOARD TEST " + i);
 		board.setWriter("test1");
-		board.setDiv(100);
+		board.setDiv(101);
 		
 		log.info("BoardVO : " + board);
 		
 		mapper.write(board);
+		}
 	}
-	
+	/*
 	@Test
 	public void getListTest() {
 		

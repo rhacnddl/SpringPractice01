@@ -10,7 +10,7 @@ import org.practice.domain.Pager;
 public interface BoardMapper {
 
 	public List<BoardVO> getListWithPaging(@Param("div") int div, @Param("p") Pager p); 
-	public List<BoardVO> getList(int div); //해당 Div의 게시글 목록
+	//public List<BoardVO> getList(int div); //해당 Div의 게시글 목록
 	
 	public void write(BoardVO board); //게시물 작성
 	public int update(BoardVO board); //게시물 수정
