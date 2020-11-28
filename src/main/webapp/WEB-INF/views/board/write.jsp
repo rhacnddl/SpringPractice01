@@ -168,10 +168,10 @@ $("#btn-map").on("click", function(){
 	           /*
 	            var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
 	            message += '경도는 ' + latlng.getLng() + ' 입니다';
-	            $("input[name='lat']").val(latlng.getLat());
-	            $("input[name='lng']").val(latlng.getLng());
 	            alert(message);
 	           */
+	            $("input[name='lat']").val(latlng.getLat());
+	            $("input[name='lng']").val(latlng.getLng());
 	        }   
 	    });
 	});

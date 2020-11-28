@@ -18,21 +18,15 @@ public class Pager {
 	
 	
 	public Pager() {
-		this(1,10, "", "");
+		this(1,10);
 	}
 	
 	public Pager(int page, int amount) {
-		this(page, amount, "", "");
-	}
-	
-	public Pager(String type, String key) {
-		this(1, 10, type, key);
-	}
-	
-	public Pager(int page, int amount, String type, String key) {
 		this.page = page;
 		this.amount = amount;
-		this.key = key;
-		this.type = type;
+	}
+	
+	public String[] getTypes() {
+		return type == null? new String[] {}:type.split("");
 	}
 }

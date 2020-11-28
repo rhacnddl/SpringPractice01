@@ -15,7 +15,7 @@ public interface BoardService {
 	public void hit(int bno);
 	public void hit_minus(int bno);
 	
-	public int getTotal(int div);
+	public int getTotal(int div, Pager p);
 	public String getNextBno(int bno, int div);
 	public String getPrevBno(int bno, int div);
 }

@@ -97,9 +97,9 @@ public class BoardServiceImpl implements BoardService{
 		mapper.hit_minus(bno);
 	}
 	@Override
-	public int getTotal(int div) {
+	public int getTotal(int div, Pager p) {
 		
-		return mapper.getTotal(div);
+		return mapper.getTotal(div, p);
 	}
 	@Override
 	public String getNextBno(int bno, int div) {

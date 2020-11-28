@@ -126,6 +126,16 @@ $(document).ready(function(){
 	
 	var boardForm = $("#boardForm");
 	var actionForm = $("#actionForm");
+	
+	var key = '${p.key}';
+	var type = '${p.type}';
+	
+	if(key != '' && type != '') {//검색처리 값이 있으면 액션폼에 추가
+		var str = "<input type='hidden' value=" + key + " name='key'>" +
+				  "<input type='hidden' value=" + type + " name='type'>";
+		actionForm.append(str);
+	}
+	
 	//목록 눌렀을 때
 	$(".go-to-list").on("click", function(e){
 		

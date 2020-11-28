@@ -25,7 +25,7 @@ public interface BoardMapper {
 	
 	public void updateCnt(@Param("bno")int bno, @Param("amount")int amount); //게시물의 댓글 수 처리
 	
-	public int getTotal(int div);
+	public int getTotal(@Param("div")int div, @Param("p")Pager p);
 	public String next_bno(@Param("bno")int bno, @Param("div") int div); //게시글의 다음 글 번호
 	public String prev_bno(@Param("bno")int bno, @Param("div") int div); //게시글의 이전 글 번호
 }

@@ -48,12 +48,13 @@ input:focus, textarea:focus{
 	<a class="go-to-list" href="#">목록</a>
 	<div align="center">
 		<c:if test="${not empty next}">
-			<a href="/board/get?bno=${next}">다음 글</a>
+			<button class="btn-next">다음 글</button>
 		</c:if>
 		<c:if test="${not empty prev}">
-			<a href="/board/get?bno=${prev}">이전 글</a>
+			<button class="btn-prev">이전 글</button>
 		</c:if>
 	</div>
+	
 	<table class="board-part-table">
 		<tbody>
 			<tr class="board-part">
@@ -376,6 +377,16 @@ $(document).ready(function(){
 	});
 	
 	var actionForm = $("#actionForm");
+	
+	var key = '${p.key}';
+	var type = '${p.type}';
+	
+	if(key != '' && type != '') {//검색처리 값이 있으면 액션폼에 추가
+		var str = "<input type='hidden' value=" + key + " name='key'>" +
+				  "<input type='hidden' value=" + type + " name='type'>";
+		actionForm.append(str);
+	}
+	
 	//목록 눌렀을 때
 	$(".go-to-list").on("click", function(e){
 		
@@ -402,6 +413,24 @@ $(document).ready(function(){
 			actionForm.attr('action', '/board/remove');
 			actionForm.submit();
 		}
+	});
+	
+	//이전 글, 다음 글 Click
+	$(".btn-next").on("click", function(e){
+		
+		e.preventDefault();
+		
+		actionForm.attr("action", "/board/get");
+		actionForm.append("<input type='hidden' name='bno' value='${next}'>");
+		actionForm.submit();
+	});
+	$(".btn-prev").on("click", function(e){
+		
+		e.preventDefault();
+		
+		actionForm.attr("action", "/board/get");
+		actionForm.append("<input type='hidden' name='bno' value='${prev}'>");
+		actionForm.submit();
 	});
 });
 </script>

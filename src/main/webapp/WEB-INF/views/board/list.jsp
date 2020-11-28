@@ -36,14 +36,25 @@ ul li{
 </c:if>
 
 		<div align="center">
-			<form id="searchForm" action="/board/list?div=${divis}">
+			<form action="/board/list" method="get" id="actionForm">
+		    	<input type="hidden" name="div" value="${divis}">
+		    	<input type="hidden" name="page" value="${pageMaker.p.page}">
+		    	<input type="hidden" name="amount" value="${pageMaker.p.amount}">
+		    </form>
+			<form id="searchForm" action="/board/list?">
 				<select name="amount">
 					<option value="10">10개씩</option>
 					<option value="15">15개씩</option>
 				</select>
 				<select name="type">
-					<option selected value="t">제목</option>
-					<option value="c">내용</option>
+					<option value=""></option>
+					<option value="T">제목</option>
+					<option value="C">내용</option>
+					<option value="W">작성자</option>
+					<option value="TC">제목+내용</option>
+					<option value="TW">제목+작성자</option>
+					<option value="CW">내용+작성자</option>
+					<option value="TCW">제목+내용+작성자</option>
 				</select>
 				<input type="hidden" name="div" value="${divis}">
 				<input type="text" name="key">
@@ -102,11 +113,7 @@ ul li{
 	    		</c:if>
 	    	</ul>
 	    </div>
-	    <form action="/board/list" method="get" id="actionForm">
-	    	<input type="hidden" name="div" value="${divis}">
-	    	<input type="hidden" name="page" value="${pageMaker.p.page}">
-	    	<input type="hidden" name="amount" value="${pageMaker.p.amount}">
-	    </form>
+	    
 	    <!-- Pager 부분 -->
     </div>
    	
@@ -121,8 +128,31 @@ $(document).ready(function(){
 	
 	var actionForm = $("#actionForm");
 	
+	//검색 처리의 key와 type 처리
+	var key = '${pageMaker.p.key}';
+	var type = '${pageMaker.p.type}';
+	
+    if(key != '' && type != '') {//검색처리 값이 있으면 액션폼에 추가
+		var str = "<input type='hidden' value=" + key + " name='key'>" +
+				  "<input type='hidden' value=" + type + " name='type'>";
+		actionForm.append(str);
+	}
+	
+	$("input[name='key']").val(key);
+
+	     if(type == 'T') {$("option[value='T']").attr("selected", true);} 
+	else if(type == 'C') {$("option[value='C']").attr("selected", true);}
+	else if(type == 'W') {$("option[value='W']").attr("selected", true);}
+	else if(type == 'TC') {$("option[value='TC']").attr("selected", true);}
+	else if(type == 'TW') {$("option[value='TW']").attr("selected", true);}
+	else if(type == 'CW') {$("option[value='CW']").attr("selected", true);}
+	else if(type == 'TCW') {$("option[value='TCW']").attr("selected", true);}
+	
+   
+	     
 	//amount == 10? 10개씩 selected:15개씩 selected
 	var amount = ${pageMaker.p.amount};
+	
 	if(amount == 10) {
 		$("option[value='10']").attr('selected', true);
 		$("option[value='15']").attr('selected', false);
@@ -138,6 +168,8 @@ $(document).ready(function(){
 		e.preventDefault();
 		
 		actionForm.find("input[name='page']").val($(this).find('a').attr('href'));
+		
+		
 		
 		actionForm.submit();
 	});
@@ -168,6 +200,7 @@ $(document).ready(function(){
 		actionForm.find("input[name='page']").val($(this).find('a').attr('href'));
 		actionForm.submit();
 	});
+	
 });
 </script>
 </body>

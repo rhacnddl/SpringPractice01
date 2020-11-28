@@ -92,7 +92,7 @@ public class BoardController {
 		log.info("=============================");
 		
 		model.addAttribute("list", service.getList(div, p));
-		model.addAttribute("pageMaker", new PageDTO(p, service.getTotal(div)));
+		model.addAttribute("pageMaker", new PageDTO(p, service.getTotal(div, p)));
 		model.addAttribute("divis", div);
 	}
 	
@@ -109,6 +109,7 @@ public class BoardController {
 		
 		log.info("================================");
 		log.info("@Controller - BoardVO : " + board);
+		log.info("MapVO map : " + map);
 		service.write(board);
 		if(!map.getLat().equals("") || map.getLat() != null)
 			map_service.insert(map);
