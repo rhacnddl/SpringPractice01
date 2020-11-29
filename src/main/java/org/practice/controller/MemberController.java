@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.Setter;
@@ -40,12 +41,14 @@ public class MemberController {
 	@GetMapping("/customLogin")
 	public void customLogin(String error, String logout, Model model) {
 		log.info("< Login >");
-		
+		try {
 		if(error != null)
 			model.addAttribute("error", "Login Error Check your Account");
 		if(logout != null)
 			model.addAttribute("logout", "Logout!");
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	@PostMapping("/customLogin")

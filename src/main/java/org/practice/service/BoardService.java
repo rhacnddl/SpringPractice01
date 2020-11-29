@@ -8,6 +8,7 @@ import org.practice.domain.Pager;
 public interface BoardService {
 
 	public List<BoardVO> getList(int div, Pager p);
+	public List<BoardVO> getNotices(int div);
 	public BoardVO get(int bno);
 	public boolean update(BoardVO board);
 	public boolean remove(int bno);

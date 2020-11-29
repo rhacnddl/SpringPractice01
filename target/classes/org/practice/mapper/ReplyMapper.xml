@@ -9,7 +9,9 @@
 </select>
 
 <select id="list" resultType="org.practice.domain.ReplyVO">
-	SELECT /*+INDEX_DESC(REPLY REPLY_PK)*/* FROM REPLY WHERE BNO = #{bno}
+	SELECT /*+INDEX(REPLY REPLY_IDX)*/ REPLY.*, ROWNUM RN 
+	FROM REPLY 
+	WHERE BNO = #{bno} AND RNO > 0
 </select>
 
 <insert id="write">

@@ -353,27 +353,28 @@ $(document).ready(function(){
 	});
 	
 	/* 댓글 삭제버튼 Click */
-	$(".btn-reply-remove").bind("click", function(e){
+	$(".btn-reply-remove").bind("click", function(e) {
 		
-		var parent_tr = $(this).closest('tr');
-		var rnoValue = $(this).closest('tr').find(".reply_rno");
-		console.log("RNO : " + rnoValue.val());
-		
-		$.ajax({
-			url : '/reply/remove',
-			method : 'POST',
-			data : {rno:rnoValue.val(),
-					_csrf:csrfToken},
-			success : function(data){
-				parent_tr.remove();
-				alert("RNO : " + rnoValue.val() + " 댓글이 삭제되었습니다.");
-			},
-			error : function(jqXHR, status, error){
-				alert("Error: " + error);
-				console.log(status);
-			}
-		}); //$.ajax end
-		
+		if(confirm("댓글을 삭제하시겠습니까?")) {
+			var parent_tr = $(this).closest('tr');
+			var rnoValue = $(this).closest('tr').find(".reply_rno");
+			console.log("RNO : " + rnoValue.val());
+			
+			$.ajax({
+				url : '/reply/remove',
+				method : 'POST',
+				data : {rno:rnoValue.val(),
+						_csrf:csrfToken},
+				success : function(data){
+					parent_tr.remove();
+					alert("RNO : " + rnoValue.val() + " 댓글이 삭제되었습니다.");
+				},
+				error : function(jqXHR, status, error){
+					alert("Error: " + error);
+					console.log(status);
+				}
+			}); //$.ajax end
+		}
 	});
 	
 	var actionForm = $("#actionForm");

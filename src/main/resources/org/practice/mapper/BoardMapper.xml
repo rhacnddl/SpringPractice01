@@ -37,9 +37,18 @@ SELECT * FROM (
     AND DIV = 101 AND ROWNUM <= 30
 ) WHERE RN > 20
  -->
+
+ <select id="getNoticeList" resultType="org.practice.domain.BoardVO">
+ 	SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT
+ 	FROM (
+ 		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ * FROM BOARD
+ 		WHERE DIV = #{div} AND NOTICE = 1
+ 	) B
+ </select>
+
 <select id="getListWithPaging" resultType="org.practice.domain.BoardVO">
 	<![CDATA[
-		SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT 
+		SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT
 		FROM (
     		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ BOARD.*, ROWNUM RN FROM BOARD 
     		WHERE 
@@ -62,7 +71,7 @@ SELECT * FROM (
     			</foreach>
     		</trim> 
     		<![CDATA[
-    		DIV = #{div} AND ROWNUM <= (#{p.page} * #{p.amount}) 
+    		DIV = #{div} AND ROWNUM <= (#{p.page} * #{p.amount}) AND NOTICE = 0
     	) B 
 		WHERE RN > (#{p.page} - 1) * #{p.amount}
 	]]>
@@ -85,8 +94,17 @@ SELECT * FROM (
 </select>
 
 <insert id="write">
-	INSERT INTO BOARD(BNO, TITLE, CONTENT, WRITER, DIV)
-	VALUES(BNO_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, #{div})
+	INSERT INTO BOARD(BNO, TITLE, CONTENT, WRITER, DIV, NOTICE)
+	VALUES(
+	<choose>
+		<when test="notice == 1">
+			BNO_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, #{div}, 1
+		</when>
+		<otherwise>
+			BNO_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, #{div}, 0
+		</otherwise>
+	</choose>
+	)
 </insert>
 
 <delete id="remove">

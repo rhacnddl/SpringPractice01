@@ -71,19 +71,7 @@ public class BoardController {
 	@Setter(onMethod_ = @Autowired)
 	private MapService map_service;
 	
-	/*
-	 @RequestParam(value="type", required = false)String type, 
-			@RequestParam(value="keyword", required = false)String keyword, 
-			@RequestParam(value="page", required = false)int page, 
-			@RequestParam(value="amount", required = false)int amount
-			
-			Pager p;
-		
-		if(Integer.toString(page) != null && Integer.toString(amount) != null)
-			p = new Pager(page, amount);
-		else
-			p = new Pager();
-	 */
+
 	@GetMapping("/list")
 	public void list(@RequestParam(value="div")int div, Pager p, Model model) {
 	
@@ -92,6 +80,7 @@ public class BoardController {
 		log.info("=============================");
 		
 		model.addAttribute("list", service.getList(div, p));
+		model.addAttribute("notice", service.getNotices(div));
 		model.addAttribute("pageMaker", new PageDTO(p, service.getTotal(div, p)));
 		model.addAttribute("divis", div);
 	}

@@ -11,6 +11,7 @@ ul li{
 	list-style-type:none;
 	display:inline;
 }
+
 </style>
 <meta charset="UTF-8">
 <title>Board List</title>
@@ -75,12 +76,27 @@ ul li{
 				<th>조회수</th>
 			</tr>
 			
+			<c:forEach var="notice" items="${notice}">
+				<fmt:formatDate var="dateTempParse" pattern="yyyy-MM-dd" value="${notice.regDate}"/>
+				<tr>
+			    <td align="center">${notice.bno}</td>
+		    	<td align="center"><b><a class="move" href="${notice.bno}" style="color:magenta">[공지]${notice.title}</a></b>
+		    		<c:if test="${notice.cnt > 0}">
+		    		<b style="color: red;">[${notice.cnt}]</b>
+		    		</c:if>
+		    	</td>
+		    	<td align="center">${notice.writer}</td>
+		    	<td align="center">${dateTempParse}</td>
+		    	<td align="center">${notice.hit}</td>
+				</tr>
+			</c:forEach>
+			
 			<c:forEach var="list" items="${list}">
 			<fmt:formatDate var="dateTempParse" pattern="yyyy-MM-dd" value="${list.regDate}"/>
 				<tr><!-- 첫번째 줄 시작 -->
 			    <td align="center">${list.bno}</td>
 			<!-- 제목 옆 댓글 수 -->
-		    	<td align="center"><a class="move" href="${list.bno}"> ${list.title}</a>
+		    	<td align="center"><a class="move" href="${list.bno}">${list.title}</a>
 		    		<c:if test="${list.cnt > 0}">
 		    		<b style="color: red;">[${list.cnt}]</b>
 		    		</c:if>
@@ -121,7 +137,7 @@ ul li{
     <div align="center">
     	<a href="/home">HOME</a>
     </div>
-
+    
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){

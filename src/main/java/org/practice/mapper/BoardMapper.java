@@ -9,6 +9,7 @@ import org.practice.domain.Pager;
 
 public interface BoardMapper {
 
+	public List<BoardVO> getNoticeList(int div);
 	public List<BoardVO> getListWithPaging(@Param("div") int div, @Param("p") Pager p); 
 	//public List<BoardVO> getList(int div); //해당 Div의 게시글 목록
 	

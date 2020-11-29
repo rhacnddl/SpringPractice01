@@ -26,11 +26,12 @@ public class BoardMapperTest {
 	public void writeTest() {
 		
 		BoardVO board = new BoardVO();
-		for(int i=0; i<50; i++) {
-		board.setTitle("여백의 미 " + i + "^^");
-		board.setContent("BOARD TEST " + i);
+		for(int i=1; i<6; i++) {
+		board.setTitle("공지사항 테스트 <" + i + ">^^");
+		board.setContent("안녕하세요. Admin입니다.< " + i + ">");
 		board.setWriter("test1");
 		board.setDiv(101);
+		board.setNotice(1);
 		
 		log.info("BoardVO : " + board);
 		

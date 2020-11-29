@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,6 +32,9 @@
 				<option value="101" <c:if test="${division == 101}">selected="selected"</c:if>>출석게시판</option>
 				<option value="102" <c:if test="${division == 102}">selected="selected"</c:if>>맛집게시판</option>
 			</select>
+			<sec:authorize access="hasRole('ADMIN')">
+				공지<input type="checkbox" name="notice" value="1">
+			</sec:authorize>
 		</div>
 		<div class="form-default">
 			<label>Title</label>

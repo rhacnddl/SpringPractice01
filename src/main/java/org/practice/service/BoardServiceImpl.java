@@ -39,6 +39,17 @@ public class BoardServiceImpl implements BoardService{
 		
 		return mapper.getListWithPaging(div, p);
 	}
+	
+	
+	@Override
+	public List<BoardVO> getNotices(int div) {
+		
+		log.info("==============================");
+		log.info("@Board Service, get Notices Div = " + div);
+		
+		return mapper.getNoticeList(div);
+	}
+	
 
 	@Override
 	public BoardVO get(int bno) {
