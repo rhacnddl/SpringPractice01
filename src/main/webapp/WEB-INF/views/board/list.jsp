@@ -6,43 +6,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-ul li{
-	list-style-type:none;
-	display:inline;
-}
-
-</style>
-<meta charset="UTF-8">
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
 <title>Board List</title>
+<link href="/resources/dist/css/styles.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="sb-nav-fixed">
 
 <sec:authentication property="principal" var="pr"/>
 
-<c:if test="${divis == 100}">
-	<div align="left">
-		<h2>자유게시판</h2>
-	</div>
-</c:if>
-<c:if test="${divis == 101}">
-	<div align="left">
-		<h2>출석게시판</h2>
-	</div>
-</c:if>
-<c:if test="${divis == 102}">
-	<div align="left">
-		<h2>맛집게시판</h2>
-	</div>
-</c:if>
+<%@include file="/WEB-INF/views/includes/header.jsp" %>
 
-		<div align="center">
-			<form action="/board/list" method="get" id="actionForm">
-		    	<input type="hidden" name="div" value="${divis}">
-		    	<input type="hidden" name="page" value="${pageMaker.p.page}">
-		    	<input type="hidden" name="amount" value="${pageMaker.p.amount}">
-		    </form>
-			<form id="searchForm" action="/board/list?">
+<main>
+
+	<form action="/board/list" method="get" id="actionForm">
+    	<input type="hidden" name="div" value="${divis}">
+    	<input type="hidden" name="page" value="${pageMaker.p.page}">
+    	<input type="hidden" name="amount" value="${pageMaker.p.amount}">
+    </form>
+    
+    <div class="container-fluid">
+    <c:if test="${divis == 100}">
+		<div align="left">
+			<h1 class="mt-4">자유게시판</h1>
+		</div>
+	</c:if>
+	<c:if test="${divis == 101}">
+		<div align="left">
+			<h1 class="mt-4">출석게시판</h1>
+		</div>
+	</c:if>
+	<c:if test="${divis == 102}">
+		<div align="left">
+			<h1 class="mt-4">맛집게시판</h1>
+		</div>
+	</c:if>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/home">Home</a></li>
+            <li class="breadcrumb-item active">Tables</li>
+        </ol>
+		<div class="card mb-4">
+            <div class="card-body">
+            ===
+                <a target="_blank" href="/home">Return Home</a>===
+                .
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Board List
+                <a align="left" href="/board/write?div=${divis}" class="btn btn-primary">게시글 작성</a>
+            </div>
+				
+            <form id="searchForm" action="/board/list?">
 				<select name="amount">
 					<option value="10">10개씩</option>
 					<option value="15">15개씩</option>
@@ -59,86 +81,92 @@ ul li{
 				</select>
 				<input type="hidden" name="div" value="${divis}">
 				<input type="text" name="key">
-				<input type="submit" value="검색"/>
+				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
 			</form>
-		</div>
-		
-		<div class="button-default" align="center">
-			<a href="/board/write?div=${divis}">게시글 작성</a>
-		</div>
-		<div align="center">
-		<table border="1" width="700" height = "130" style="border-collapse: collapse;">
-			<tr bgcolor="yellow" align="center">
-				<th>No.</th>
-				<th>제목</th>
-				<th>작성자</th>
-				<th>작성일자</th>
-				<th>조회수</th>
-			</tr>
-			
-			<c:forEach var="notice" items="${notice}">
-				<fmt:formatDate var="dateTempParse" pattern="yyyy-MM-dd" value="${notice.regDate}"/>
-				<tr>
-			    <td align="center">${notice.bno}</td>
-		    	<td align="center"><b><a class="move" href="${notice.bno}" style="color:magenta">[공지]${notice.title}</a></b>
-		    		<c:if test="${notice.cnt > 0}">
-		    		<b style="color: red;">[${notice.cnt}]</b>
-		    		</c:if>
-		    	</td>
-		    	<td align="center">${notice.writer}</td>
-		    	<td align="center">${dateTempParse}</td>
-		    	<td align="center">${notice.hit}</td>
-				</tr>
-			</c:forEach>
-			
-			<c:forEach var="list" items="${list}">
-			<fmt:formatDate var="dateTempParse" pattern="yyyy-MM-dd" value="${list.regDate}"/>
-				<tr><!-- 첫번째 줄 시작 -->
-			    <td align="center">${list.bno}</td>
-			<!-- 제목 옆 댓글 수 -->
-		    	<td align="center"><a class="move" href="${list.bno}">${list.title}</a>
-		    		<c:if test="${list.cnt > 0}">
-		    		<b style="color: red;">[${list.cnt}]</b>
-		    		</c:if>
-		    	</td>
-		    	<td align="center">${list.writer}</td>
-		    	<td align="center">${dateTempParse}</td>
-		    	<td align="center">${list.hit}</td>
-				</tr><!-- 첫번째 줄 끝 -->
-			</c:forEach>
-	    </table>
-	     <!-- Pager 부분 -->
-	    <div class="pager-first">
-	    	<ul class="pagination">
-	    		<!-- [이전] -->
-	    		<c:if test="${pageMaker.prev}">
-	    			<li class="paginate_btn_prev"><a href="${pageMaker.startPage - 1}">Prev</a></li>
-	    		</c:if>
-	    		
-	    		<!-- [페이저] -->
-	    		<c:forEach var="n" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-		    		<c:if test="${n == pageMaker.p.page}"><c:set var="color" value="style='color:orange;'"/></c:if>
-		    		<c:if test="${n != pageMaker.p.page}"><c:set var="color" value=""/></c:if>
-		    		
-	    			<li class="paginate_btn"><a ${color} href="${n}">[${n}]</a></li>
-	    		</c:forEach>
-	    		
-	    		<!-- [다음] -->
-	    		<c:if test="${pageMaker.next}">
-	    			<li class="paginate_btn_next"><a href="${pageMaker.endPage + 1}">Next</a></li>
-	    		</c:if>
-	    	</ul>
-	    </div>
-	    
-	    <!-- Pager 부분 -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered"  width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                            	<th>No.</th>
+                                <th>Title</th>
+                                <th>Writer</th>
+                                <th>Register Date</th>
+                                <th>Hits</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="notice" items="${notice}">
+							<fmt:formatDate var="dateTempParse" pattern="yyyy-MM-dd" value="${notice.regDate}"/>
+							<tr>
+						    <td align="center">${notice.bno}</td>
+					    	<td align="center"><b><a class="move" href="${notice.bno}" style="color:magenta">[공지]${notice.title}</a></b>
+					    		<c:if test="${notice.cnt > 0}">
+					    		<b style="color: red;">[${notice.cnt}]</b>
+					    		</c:if>
+					    	</td>
+					    	<td align="center">${notice.writer}</td>
+					    	<td align="center">${dateTempParse}</td>
+					    	<td align="center">${notice.hit}</td>
+							</tr>
+							</c:forEach>
+							
+							<c:forEach var="list" items="${list}">
+							<fmt:formatDate var="dateTempParse" pattern="yyyy-MM-dd" value="${list.regDate}"/>
+								<tr><!-- 첫번째 줄 시작 -->
+							    <td align="center">${list.bno}</td>
+								<!-- 제목 옆 댓글 수 -->
+						    	<td align="center"><a class="move" href="${list.bno}">${list.title}</a>
+						    		<c:if test="${list.cnt > 0}">
+						    		<b style="color: red;">[${list.cnt}]</b>
+						    		</c:if>
+						    	</td>
+						    	<td align="center">${list.writer}</td>
+						    	<td align="center">${dateTempParse}</td>
+						    	<td align="center">${list.hit}</td>
+								</tr><!-- 첫번째 줄 끝 -->
+							</c:forEach>
+                        </tbody>
+                    </table>
+                    <!-- Pager 부분 -->
+				    <div class="pager-first">
+				    	<ul class="pagination">
+				    		<!-- [이전] -->
+				    		<c:if test="${pageMaker.prev}">
+				    			<li class="paginate_btn_prev"><a href="${pageMaker.startPage - 1}" class="page-link">Prev</a></li>
+				    		</c:if>
+				    		
+				    		<!-- [페이저] -->
+				    		<c:forEach var="n" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+					    		<c:if test="${n == pageMaker.p.page}"><c:set var="color" value="style='color:orange;'"/></c:if>
+					    		<c:if test="${n != pageMaker.p.page}"><c:set var="color" value=""/></c:if>
+					    		
+				    			<li class="paginate_btn"><a ${color} href="${n}" class="page-link">[${n}]</a></li>
+				    		</c:forEach>
+				    		
+				    		<!-- [다음] -->
+				    		<c:if test="${pageMaker.next}">
+				    			<li class="paginate_btn_next"><a href="${pageMaker.endPage + 1}" class="page-link">Next</a></li>
+				    		</c:if>
+				    	</ul>
+				    </div>
+				    <!-- Pager 부분 -->
+                </div>
+            </div>
+        </div>
     </div>
-   	
-   
-    <div align="center">
-    	<a href="/home">HOME</a>
-    </div>
-    
+</main>
+
+<%@include file="/WEB-INF/views/includes/footer.jsp" %>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/resources/dist/js/scripts.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+<script src="/resources/dist/assets/demo/datatables-demo.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	
