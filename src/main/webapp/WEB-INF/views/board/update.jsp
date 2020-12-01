@@ -23,13 +23,22 @@ input:focus, textarea:focus{
 	outline:none;
 }
 </style>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<link href="/resources/dist/css/styles.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
 <title>Board Update</title>
 </head>
-<body>
+<body class="sb-nav-fixed">
 
 <sec:authentication property="principal" var="pr"/>
 <c:set var="bno" value="${board.bno}"/>
 <c:set var="division" value="${board['div']}"/>
+
+<%@include file="/WEB-INF/views/includes/header.jsp" %>
 
 <div align="center">
 	<h1>Board Update</h1>
@@ -117,8 +126,13 @@ input:focus, textarea:focus{
 	<a class="go-to-list" href="#">이전</a>
 </div>
 
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<%@include file="/WEB-INF/views/includes/footer.jsp" %>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/resources/dist/js/scripts.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+<script src="/resources/dist/assets/demo/datatables-demo.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	

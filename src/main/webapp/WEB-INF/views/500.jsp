@@ -8,8 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>404 Error - SB Admin</title>
-        <link href="css/styles.css" rel="stylesheet" />
+        <title>500 Error - SB Admin</title>
+        <link href="/resources/dist/css/styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body>
@@ -22,9 +22,9 @@
                                 <div class="text-center mt-4">
                                     <h1 class="display-1">500</h1>
                                     <p class="lead">Internal Server Error</p>
-                                    <a href="index.html">
+                                    <a href="/home">
                                         <i class="fas fa-arrow-left mr-1"></i>
-                                        Return to Dashboard
+                                        Return to Home
                                     </a>
                                 </div>
                             </div>
@@ -49,6 +49,6 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
+        <script src="/resources/dist/js/scripts.js"></script>
     </body>
 </html>

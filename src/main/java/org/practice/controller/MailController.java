@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -33,8 +34,10 @@ public class MailController {
 	}
 	
 	@PostMapping("/send")
-	public String send(MailVO vo) {
+	public ModelAndView send(MailVO vo, ModelAndView mv) {
 
+		mv.setViewName("/home");
+		log.info("@MailController, sendPost MailVO : " + vo);
 		final MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			
 			@Override 
@@ -50,7 +53,7 @@ public class MailController {
 			}; 
 			mailSender.send(preparator);
 			
-			return "result";
+			return mv;
 			//return new ResponseEntity<String>("Success", HttpStatus.OK);
 	}
 
