@@ -54,11 +54,11 @@ input:focus, textarea:focus{
 	
 	<a class="go-to-list" href="#">이전</a>
 	<form id="boardForm" action="/board/update" method="post" enctype="multipart/form-data">
-		<table class="board-part-table">
+		<table class="table table-bordered table-striped">
 			<tbody>
-				<tr class="board-part">
-					<th class="board-part">Category</th>
-					<td class="board-part">
+				<tr>
+					<th scope="row">Category</th>
+					<td>
 					<c:if test="${division eq 100}">
 						<input type="text" value="자유게시판" readonly="readonly" class="board-part-input">
 					</c:if>
@@ -67,37 +67,37 @@ input:focus, textarea:focus{
 					</c:if>
 					</td>
 				</tr>
-				<tr class="board-part">
-					<th class="board-part">Board No.</th>
-					<td class="board-part"><input type="text" name="bno" value="${board.bno}" readonly="readonly" class="board-part-input"></td>
-				</tr>
-				<tr class="board-part">
-					<th class="board-part">Title</th>
-					<td class="board-part"><input type="text" name="title" value="${board.title}" class="board-part-input"></td>
-				</tr>
-				<tr class="board-part">
-					<th class="board-part">Content</th>
-					<td class="board-part"><textarea rows="4" cols="70" style="resize:none;" name="content" class="board-part-input">${board.content}</textarea></td>
-				</tr>
-				<tr  class="board-part">
-					<th class="board-part">Hit</th>
-					<td class="board-part"><input type="text" name="hit" value="${board.hit}" readonly="readonly" class="board-part-input"></td>
-				</tr>
-				<tr class="board-part">
-					<th class="board-part">Writer</th>
-					<td class="board-part"><input type="text" name="writer" value="${board.writer}" readonly="readonly" class="board-part-input"></td>
-				</tr>
-				<tr class="board-part">
-					<th class="board-part">Write Date</th>
-					<td class="board-part"><input type="text" class="board-part-input" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.regDate}"/>" readonly="readonly"></td>
-				</tr>
-				<tr class="board-part">
-					<th class="board-part">Update Date</th>
-					<td class="board-part"><input type="text" class="board-part-input" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/>" readonly="readonly"></td>
+				<tr>
+					<th scope="row">Board No.</th>
+					<td><input type="text" name="bno" value="${board.bno}" readonly="readonly" class="board-part-input"></td>
 				</tr>
 				<tr>
-					<th class="board-part">File<th>
-					<td class="board-part"><input type="file" class="board-part-input" name="uploadFile" multiple></td>
+					<th scope="row">Title</th>
+					<td><input type="text" name="title" value="${board.title}" class="board-part-input"></td>
+				</tr>
+				<tr>
+					<th scope="row">Content</th>
+					<td><textarea rows="4" cols="70" style="resize:none;" name="content" class="board-part-input">${board.content}</textarea></td>
+				</tr>
+				<tr >
+					<th scope="row">Hit</th>
+					<td><input type="text" name="hit" value="${board.hit}" readonly="readonly" class="board-part-input"></td>
+				</tr>
+				<tr>
+					<th scope="row">Writer</th>
+					<td><input type="text" name="writer" value="${board.writer}" readonly="readonly" class="board-part-input"></td>
+				</tr>
+				<tr>
+					<th scope="row">Write Date</th>
+					<td><input type="text" class="board-part-input" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.regDate}"/>" readonly="readonly"></td>
+				</tr>
+				<tr>
+					<th scope="row">Update Date</th>
+					<td><input type="text" class="board-part-input" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/>" readonly="readonly"></td>
+				</tr>
+				<tr>
+					<th scope="row">File<th>
+					<td><input type="file" class="board-part-input" name="uploadFile" multiple></td>
 				</tr>
 			</tbody>
 		</table>

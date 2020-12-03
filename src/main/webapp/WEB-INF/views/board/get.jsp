@@ -15,10 +15,6 @@
 	border-collapse: collapse;
 	
 }
-.board-part{
-	border:1px solid;
-	
-}
 .board-part-input{
 	width:99%;
 	border:0;
@@ -64,11 +60,11 @@ input:focus, textarea:focus{
 		</c:if>
 	</div>
 	
-	<table class="board-part-table">
+	<table class="table table-bordered table-striped">
 		<tbody>
-			<tr class="board-part">
-				<th class="board-part">Category</th>
-				<td class="board-part">
+			<tr>
+				<th scope="row">Category</th>
+				<td>
 				<c:if test="${division eq 100}">
 					<input type="text" name="div" value="자유게시판" readonly="readonly" class="board-part-input">
 				</c:if>
@@ -80,38 +76,38 @@ input:focus, textarea:focus{
 				</c:if>
 				</td>
 			</tr>
-			<tr class="board-part">
-				<th class="board-part">Board No.</th>
-				<td class="board-part"><input type="text" class="board-part-input" name="bno" value="${board.bno}" readonly="readonly"></td>
+			<tr>
+				<th scope="row">Board No.</th>
+				<td><input type="text" class="board-part-input" name="bno" value="${board.bno}" readonly="readonly"></td>
 			</tr>
-			<tr class="board-part">
-				<th class="board-part">Title</th>
-				<td class="board-part"><input type="text" class="board-part-input" name="title" value="${board.title}" readonly="readonly"></td>
+			<tr>
+				<th scope="row">Title</th>
+				<td><input type="text" class="board-part-input" name="title" value="${board.title}" readonly="readonly"></td>
 			</tr>
-			<tr class="board-part">
-				<th class="board-part">Content</th>
-				<td class="board-part">
+			<tr>
+				<th scope="row">Content</th>
+				<td>
 					<textarea rows="4" cols="70" style="resize:none;height:99%;" class="board-part-input" name="content" readonly="readonly">${board.content}</textarea>
 					<c:if test="${not empty map}">
 						<div id="staticMap" style="width:600px;height:350px;"></div> 
 					</c:if>
 				</td>
 			</tr>
-			<tr class="board-part">
-				<th class="board-part">Hit</th>
-				<td class="board-part"><input type="text" class="board-part-input" name="hit" value="${board.hit}" readonly="readonly"></td>
+			<tr>
+				<th scope="row">Hit</th>
+				<td><input type="text" class="board-part-input" name="hit" value="${board.hit}" readonly="readonly"></td>
 			</tr>
-			<tr class="board-part">
-				<th class="board-part">Writer</th>
-				<td class="board-part"><input type="text" class="board-part-input" name="writer" value="${board.writer}" readonly="readonly"></td>
+			<tr>
+				<th scope="row">Writer</th>
+				<td><input type="text" class="board-part-input" name="writer" value="${board.writer}" readonly="readonly"></td>
 			</tr>
-			<tr class="board-part">
-				<th class="board-part">Write Date</th>
-				<td class="board-part"><input type="text" class="board-part-input" name="regDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.regDate}"/>" readonly="readonly"></td>
+			<tr>
+				<th scope="row">Write Date</th>
+				<td><input type="text" class="board-part-input" name="regDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.regDate}"/>" readonly="readonly"></td>
 			</tr>
 			<tr class="board-part-tr">
-				<th class="board-part">Update Date</th>
-				<td class="board-part"><input type="text" class="board-part-input" name="updateDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/>" readonly="readonly"></td>
+				<th scope="row">Update Date</th>
+				<td><input type="text" class="board-part-input" name="updateDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/>" readonly="readonly"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -128,18 +124,18 @@ input:focus, textarea:focus{
 	</ul>
 </div>
 <!-- File Part -->
-<div align="center">
-	<a class="go-to-list" href="#">목록</a>
-	<div>
+<div class="row">
+	<div class="col"></div>
+	<div class="col">
+		<a class="go-to-list" href="#">목록</a>
 	<c:if test="${pr.username eq board.writer}">
-		<button class="btn-update">수정하기</button>
+		<button class="btn-update btn-primary">수정하기</button>
 	</c:if>
-	</div>
-	<div>
 	<c:if test="${pr.username eq board.writer}">
-		<button class="btn-remove">삭제하기</button>
+		<button class="btn-remove btn-primary">삭제하기</button>
 	</c:if>	
 	</div>
+	<div class="col"></div>
 </div>
 <script type="text/javascript">
 	
@@ -162,13 +158,13 @@ input:focus, textarea:focus{
 		<!-- 댓글 작성 div -->
 		<!-- 댓글 리스트 div -->
 		<div class="reply-list">
-			<table>
+			<table class="table table-bordered table-striped">
 				<tbody>
 					<c:forEach items="${reply}" var="r">
 						<c:if test="${r.r_rno == null || r.r_rno == 0}">
 						<tr>
-							<th>${r.writer} </th>
-							<td> : <input type="text" class="reply_content" value="${r.content}" readonly>  </td>
+							<th scope="row">${r.writer} </th>
+							<td><input type="text" class="reply_content" value="${r.content}" readonly>  </td>
 							<td> / <fmt:formatDate value="${r.regDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 							<c:if test="${r.updateDate != null}">
 								<td> / <fmt:formatDate value="${r.updateDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
@@ -193,10 +189,10 @@ input:focus, textarea:focus{
 						<c:forEach var="r_r" items="${reply}">
 							<c:if test="${r_r.r_rno == r.rno}">
 								<tr>
-									<th>${r.writer} <- ${r_r.writer}</th>
-									<td> : <input type="text" class="reply_content" value="${r_r.content}" readonly>  </td>
+									<th scope="row">${r.writer} <- ${r_r.writer}</th>
+									<td><input type="text" class="reply_content" value="${r_r.content}" readonly>  </td>
 									<td> / <fmt:formatDate value="${r_r.regDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
-									<c:if test="${r.updateDate != null}">
+									<c:if test="${r_r.updateDate != null}">
 										<td> / <fmt:formatDate value="${r_r.updateDate}" pattern="yy-MM-dd HH:mm:ss"/> </td>
 									</c:if>
 										
