@@ -93,6 +93,15 @@
 	                </div>
 	            </div>
 	        </sec:authorize>
+	        <div class="col-xl-3 col-md-6">
+	                <div class="card bg-success text-white mb-4">
+	                    <div class="card-body">채팅</div>
+	                    <div class="card-footer d-flex align-items-center justify-content-between">
+	                        <a class="small text-white stretched-link" href="/chat">View Details</a>
+	                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+	                    </div>
+	                </div>
+	            </div>
 	        </div>
 	       
 	    </div><!-- </div class="container-fluid"> -->
