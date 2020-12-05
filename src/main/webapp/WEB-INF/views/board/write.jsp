@@ -34,9 +34,9 @@
 <div align="center">
 	<a href="/board/list?div=${division}">목록</a>
 </div>
-<div class="form-board-write" align="center">
+<div class="alert alert-light" role="alert">
 	<form action="/board/write" method="post" enctype="multipart/form-data">
-		<div class="form-default">
+		<div class="alert alert-success" role="alert">
 			<label>Category</label>
 			<select name="div">
 				<option value="100" <c:if test="${division == 100}">selected="selected"</c:if>>자유게시판</option>
@@ -47,22 +47,22 @@
 				공지<input type="checkbox" name="notice" value="1">
 			</sec:authorize>
 		</div>
-		<div class="form-default">
+		<div class="alert alert-success" role="alert">
 			<label>Title</label>
 			<input type="text" name="title">
 		</div>
-		<div class="form-default">
+		<div class="alert alert-info" role="alert">
 			<label>Content</label>
 			<div>
 				<textarea rows="10" cols="100" name="content"></textarea>
 			</div>
 		</div>
-		<div class="form-default">
+		<div class="alert alert-success" role="alert">
 			<label>Writer</label>
 			<input name="writer" value="${writer}" readonly="readonly">
 		</div>
 		<!-- File Upload -->
-		<div class="form-default">
+		<div class="alert alert-info" role="alert">
 			<input type="file" id="uploadFile" name="uploadFile" multiple="multiple">
 			<button name="btn-delete">X</button>
 		</div>
@@ -84,7 +84,7 @@
 </div>
 </div>
 
-<div align="center">
+<div align="center" class="alert alert-success" role="alert">
 	<a href="/board/list?div=${division}">목록</a>
 </div>
 

@@ -48,7 +48,7 @@
 	</c:if>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/home">Home</a></li>
-            <li class="breadcrumb-item active">Tables</li>
+            <li class="breadcrumb-item active">Boards</li>
         </ol>
 		<div class="card mb-4">
             <div class="card-body">
@@ -61,7 +61,7 @@
             <div class="card-header">
                 <i class="fas fa-table mr-1"></i>
                 Board List
-                <a align="left" href="/board/write?div=${divis}" class="btn btn-primary">게시글 작성</a>
+                <a align="left" href="/board/write?div=${divis}" class="btn btn-info">게시글 작성</a>
             </div>
 				
             <form id="searchForm" action="/board/list?">

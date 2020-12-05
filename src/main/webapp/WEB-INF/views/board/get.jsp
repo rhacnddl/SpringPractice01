@@ -138,7 +138,7 @@ input:focus, textarea:focus{
 	<div class="col"></div>
 </div>
 <script type="text/javascript">
-	
+	<!-- -->
 </script>
 <!-- 이하 댓글창 -->
 <div class="reply-first-frame" align="center">
