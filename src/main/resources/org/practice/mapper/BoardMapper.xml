@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org//dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.practice.mapper.BoardMapper">
+
+<select id="exist" resultType="string">
+	SELECT WRITER FROM BOARD WHERE BNO = #{bno}
+</select>
+
+<select id="getTotal" resultType="Integer">
+	SELECT COUNT(BNO) FROM BOARD WHERE 
+	<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+    			<foreach collection="p.types" item="type">
+    				<trim prefix="OR">
+    					<choose>
+    						<when test="type == 'T'.toString()">
+    							TITLE LIKE '%'||#{p.key}||'%'
+    						</when>
+    						<when test="type == 'C'.toString()">
+    							CONTENT LIKE '%'||#{p.key}||'%'
+    						</when>
+    						<when test="type == 'W'.toString()">
+    							WRITER LIKE '%'||#{p.key}||'%'
+    						</when>
+    					</choose>
+    				</trim>
+    			</foreach>
+    		</trim> 
+	DIV = #{div}
+</select>
+<!-- 
+SELECT * FROM (
+    SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ BNO, TITLE, WRITER, REGDATE, HIT, CNT, ROWNUM RN FROM
+    BOARD WHERE 
+    (TITLE LIKE '%test%' OR CONTENT LIKE '%test%' OR WRITER LIKE '%test%')
+    AND DIV = 101 AND ROWNUM <= 30
+) WHERE RN > 20
+ -->
+
+ <select id="getNoticeList" resultType="org.practice.domain.BoardVO">
+ 	SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT
+ 	FROM (
+ 		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ * FROM BOARD
+ 		WHERE DIV = #{div} AND NOTICE = 1
+ 	) B
+ </select>
+
+<select id="getListWithPaging" resultType="org.practice.domain.BoardVO">
+	<![CDATA[
+		SELECT B.TITLE, B.WRITER, B.REGDATE, B.BNO, B.DIV, B.HIT, B.CNT
+		FROM (
+    		SELECT /*+INDEX_DESC(BOARD BOARD_PK)*/ BOARD.*, ROWNUM RN FROM BOARD 
+    		WHERE 
+    		]]>
+    		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+    			<foreach collection="p.types" item="type">
+    				<trim prefix="OR">
+    					<choose>
+    						<when test="type == 'T'.toString()">
+    							TITLE LIKE '%'||#{p.key}||'%'
+    						</when>
+    						<when test="type == 'C'.toString()">
+    							CONTENT LIKE '%'||#{p.key}||'%'
+    						</when>
+    						<when test="type == 'W'.toString()">
+    							WRITER LIKE '%'||#{p.key}||'%'
+    						</when>
+    					</choose>
+    				</trim>
+    			</foreach>
+    		</trim> 
+    		<![CDATA[
+    		DIV = #{div} AND ROWNUM <= (#{p.page} * #{p.amount}) AND NOTICE = 0
+    	) B 
+		WHERE RN > (#{p.page} - 1) * #{p.amount}
+	]]>
+</select>
+
+<select id="next_bno" resultType="string">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT BNO FROM BOARD WHERE DIV = #{div} AND BNO > #{bno} ORDER BY BNO
+	) WHERE ROWNUM <= 1
+	]]>
+</select>
+
+<select id="prev_bno" resultType="string">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT BNO FROM BOARD WHERE DIV = #{div} AND BNO < #{bno} ORDER BY BNO DESC
+	) WHERE ROWNUM <= 1
+	]]>
+</select>
+
+<insert id="write">
+	INSERT INTO BOARD(BNO, TITLE, CONTENT, WRITER, DIV, NOTICE)
+	VALUES(
+	<choose>
+		<when test="notice == 1">
+			BNO_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, #{div}, 1
+		</when>
+		<otherwise>
+			BNO_SEQ.NEXTVAL, #{title}, #{content}, #{writer}, #{div}, 0
+		</otherwise>
+	</choose>
+	)
+</insert>
+
+<delete id="remove">
+	DELETE BOARD WHERE BNO = #{bno}
+</delete>
+
+<resultMap type="org.practice.domain.BoardVO" id="boardMap">
+	<id property="bno" column="BNO"/>
+	<result property="bno" column="BNO"/>
+	<result property="title" column="TITLE"/>
+	<result property="content" column="CONTENT"/>
+	<result property="writer" column="WRITER"/>
+	<result property="regDate" column="REGDATE"/>
+	<result property="updateDate" column="UPDATEDATE"/>
+	<result property="div" column="DIV"/>
+	<result property="hit" column="HIT"/>
+	<collection column="fileList" property="fileList" resultMap="fileMap">
+	</collection>
+</resultMap>
+
+<resultMap type="org.practice.domain.FileVO" id="fileMap" >
+	<result property="fileName" column="FILENAME"/>
+	<result property="uuid" column="UUID"/>
+</resultMap>
+
+<select id="get" resultMap="boardMap">
+	SELECT B.BNO, TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE, DIV, HIT, FILENAME, UUID 
+	FROM BOARD B 
+	LEFT OUTER JOIN FILES F ON B.BNO = F.BNO 
+	WHERE B.BNO = #{bno}
+</select>
+
+
+
+<update id="update">
+	UPDATE BOARD SET
+	TITLE = #{title}, CONTENT = #{content}, UPDATEDATE = SYSDATE
+	WHERE BNO = #{bno} 
+</update>
+
+<update id="hit">
+	UPDATE BOARD SET HIT = HIT + 1 WHERE BNO = #{bno}
+</update>
+
+<update id="hit_minus">
+	UPDATE BOARD SET HIT = HIT - 1 WHERE BNO = #{bno}
+</update>
+
+<update id="updateCnt">
+	UPDATE BOARD SET CNT = CNT + #{amount} WHERE BNO = #{bno}
+</update>
+</mapper>
