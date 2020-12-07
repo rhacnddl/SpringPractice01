@@ -12,6 +12,7 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<security:http>
+		<!-- <security:csrf disabled="true"/> -->
 		<security:headers>
 			<security:frame-options disabled="true" />
 		</security:headers>

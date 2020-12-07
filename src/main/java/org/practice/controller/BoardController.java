@@ -129,8 +129,8 @@ public class BoardController {
 		model.addAttribute("map", map_service.show(bno));
 		//model.addAttribute("p", p);
 		
-		String next = service.getNextBno(bno, board.getDiv()); //°Ô½Ã±ÛÀÇ ´ÙÀ½ ±Û
-		String prev = service.getPrevBno(bno, board.getDiv()); //°Ô½Ã±ÛÀÇ ÀÌÀü ±Û
+		String next = service.getNextBno(bno, board.getDiv()); //ï¿½Ô½Ã±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+		String prev = service.getPrevBno(bno, board.getDiv()); //ï¿½Ô½Ã±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 		if(next != null)
 			model.addAttribute("next", next);
 		if(prev != null)
@@ -184,11 +184,11 @@ public class BoardController {
 
 			map_service.remove(bno);
 			
-			//ÇØ´ç °Ô½Ã¹°¿¡ ÀÖ´Â ´ñ±Ûµé »èÁ¦
+			//ï¿½Ø´ï¿½ ï¿½Ô½Ã¹ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½Ûµï¿½ ï¿½ï¿½ï¿½ï¿½
 			List<ReplyVO> replies = reply_service.list(bno);
 			replies.forEach(reply -> reply_service.remove(reply.getBno()));
 			
-			//ÇØ´ç °Ô½Ã¹°¿¡ ÀÖ´Â ÆÄÀÏµé »èÁ¦
+			//ï¿½Ø´ï¿½ ï¿½Ô½Ã¹ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½ï¿½
 			List<FileVO> list = upload_service.getFileList(bno);
 			log.info("Remove Board's Files : " + list);
 			list.forEach(vo -> upload_service.deleteFile(vo.getUuid()));
@@ -276,7 +276,7 @@ public class BoardController {
 	}
 	
 	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	@ResponseBody //¼­¹ö->Å¬¶óÀÌ¾ðÆ®·Î ÀÀ´äÀ» Àü¼ÛÇÒ ¶§ Body¿¡ µ¥ÀÌÅÍ ´ã¾Æº¸³¿
+	@ResponseBody //ï¿½ï¿½ï¿½ï¿½->Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Bodyï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æºï¿½ï¿½ï¿½
 	public ResponseEntity<Resource> download(@RequestHeader("User-Agent") String agent, String uuid) {
 		
 		FileVO file = upload_service.getFile(uuid);
@@ -339,7 +339,7 @@ public class BoardController {
 		log.info("@Controller, UploadController");
 		log.info("Upload Path : " + uploadPath.toString());
 		
-		//Æú´õ°¡ ¾ø´Ù¸é Æú´õ »ý¼º
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if(!uploadPath.exists())
 			uploadPath.mkdirs();
 
@@ -347,12 +347,12 @@ public class BoardController {
 			log.info("File Name : " + file.getOriginalFilename());
 			log.info("File Size : " + file.getSize());
 			
-			//MultipartFile -> File (ÆÄÀÏ ÀúÀå ±¸Çö)
+			//MultipartFile -> File (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 			FileVO vo = new FileVO();
 			
-			UUID uuid = UUID.randomUUID(); //Áßº¹¹æÁö¸¦ À§ÇÑ UUID
+			UUID uuid = UUID.randomUUID(); //ï¿½ßºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ UUID
 			String fileName = file.getOriginalFilename();
-			fileName = fileName.substring(fileName.lastIndexOf("\\") + 1); //IE¿¡¼­ ¾÷·Îµå ÇÒ ¶§¸¦ À§ÇÔ
+			fileName = fileName.substring(fileName.lastIndexOf("\\") + 1); //IEï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			
 			vo.setFileName(fileName);
 			vo.setUuid(uuid.toString());
